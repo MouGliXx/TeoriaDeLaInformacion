@@ -6,6 +6,9 @@ import java.util.HashMap;
 
 public class Main {
     public static void main(String[] args) {
+        /**
+         * Leo los datos del archivo y se los asigno a un String
+         * **/
         BufferedReader archivo;
         String fileName, datos = null;
 
