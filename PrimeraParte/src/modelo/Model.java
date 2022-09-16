@@ -1,6 +1,7 @@
 package modelo;
 
 public class Model {
+
     public static double[][] generarMatrizProbabilidades(String datos, int n) {
         double[][] prob = new double[n][n];
         int t, q;
