@@ -23,6 +23,13 @@ public class Main {
         }
 
         /**
+         * Extraigo los diferentes simbolos de los datos
+         * **/
+        ArrayList<Character> simbolos = Modelo2.extraeSimbolos(datos);
+
+//        System.out.println(simbolos);
+
+        /**
          * Separo los datos en palabras de 3, 5 y 7 caracteres
          * **/
         ArrayList<String> datos3C = Modelo2.diferenciaPalabras(datos, 3);
@@ -73,8 +80,36 @@ public class Main {
         double entropia5C = Modelo2.calculaEntropia(alfabeto5C,informacion5C, frecuencias5C, datos5C.size());
         double entropia7C = Modelo2.calculaEntropia(alfabeto7C,informacion7C, frecuencias7C, datos7C.size());
 
-        System.out.println(entropia3C);
-        System.out.println(entropia5C);
-        System.out.println(entropia7C);
+//        System.out.println(entropia3C);
+//        System.out.println(entropia5C);
+//        System.out.println(entropia7C);
+
+        /**
+         * Verifico si los alfabetos son bloque
+         * **/
+        System.out.println("\nEl alfabeto3C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size()));
+        System.out.println("El alfabeto5C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto5C, alfabeto5C.size()));
+        System.out.println("El alfabeto7C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto7C, alfabeto7C.size()));
+
+        /**
+         * Verifico si los alfabetos son NO singulares
+         * **/
+        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esNoSingular(alfabeto3C));
+        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esNoSingular(alfabeto5C));
+        System.out.println("El alfabeto7C es NO singular: " + Modelo2.esNoSingular(alfabeto7C));
+
+        /**
+         * Verifico si los alfabetos son Univocamente Decodificables
+         * **/
+//        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto3C));
+//        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto5C));
+//        System.out.println("El alfabeto7C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto7C));
+
+        /**
+         * Verifico si los alfabetos son instantaneos
+         * **/
+        System.out.println("\nEl alfabeto3C es instantaneo: " + Modelo2.esNoSingular(alfabeto3C));
+        System.out.println("El alfabeto5C es instantaneo: " + Modelo2.esNoSingular(alfabeto5C));
+        System.out.println("El alfabeto7C es instantaneo: " + Modelo2.esNoSingular(alfabeto7C));
     }
 }
