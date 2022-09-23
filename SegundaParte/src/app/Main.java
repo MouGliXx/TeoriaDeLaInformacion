@@ -10,10 +10,10 @@ public class Main {
          * Leo los datos del archivo y se los asigno a un String
          * **/
         BufferedReader archivo;
-        String fileName, datos = null;
+        String inputFileName, datos = null;
 
-        fileName = "DatosTP1.txt";
-        File url = new File(fileName);
+        inputFileName = "DatosTP1.txt";
+        File url = new File(inputFileName);
 
         try {
             archivo = new BufferedReader(new FileReader(url));
@@ -84,32 +84,52 @@ public class Main {
 //        System.out.println(entropia5C);
 //        System.out.println(entropia7C);
 
+        try {
+            Modelo2.generarArchivoIncisoA(informacion3C, informacion5C, informacion7C, entropia3C, entropia5C, entropia7C);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         /**
          * Verifico si los alfabetos son bloque
          * **/
-        System.out.println("\nEl alfabeto3C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size()));
-        System.out.println("El alfabeto5C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto5C, alfabeto5C.size()));
-        System.out.println("El alfabeto7C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto7C, alfabeto7C.size()));
+        boolean esCodBlq3C = Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size());
+        boolean esCodBlq5C = Modelo2.esCodigoBloque(simbolos, alfabeto5C, alfabeto5C.size());
+        boolean esCodBlq7C = Modelo2.esCodigoBloque(simbolos, alfabeto7C, alfabeto7C.size());
+
+
+//        System.out.println("\nEl alfabeto3C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size()));
+//        System.out.println("El alfabeto5C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto5C, alfabeto5C.size()));
+//        System.out.println("El alfabeto7C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto7C, alfabeto7C.size()));
 
         /**
          * Verifico si los alfabetos son NO singulares
          * **/
-        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esNoSingular(alfabeto3C));
-        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esNoSingular(alfabeto5C));
-        System.out.println("El alfabeto7C es NO singular: " + Modelo2.esNoSingular(alfabeto7C));
+        boolean esNoSing3C = Modelo2.esNoSingular(alfabeto3C);
+        boolean esNoSing5C = Modelo2.esNoSingular(alfabeto5C);
+        boolean esNoSing7C = Modelo2.esNoSingular(alfabeto7C);
 
-        /**
-         * Verifico si los alfabetos son Univocamente Decodificables
-         * **/
-//        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto3C));
-//        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto5C));
-//        System.out.println("El alfabeto7C es NO singular: " + Modelo2.esUnivocamenteDecodificable(alfabeto7C));
+//        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esNoSingular(alfabeto3C));
+//        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esNoSingular(alfabeto5C));
+//        System.out.println("El alfabeto7C es NO singular: " + Modelo2.esNoSingular(alfabeto7C));
 
         /**
          * Verifico si los alfabetos son instantaneos
          * **/
-        System.out.println("\nEl alfabeto3C es instantaneo: " + Modelo2.esNoSingular(alfabeto3C));
-        System.out.println("El alfabeto5C es instantaneo: " + Modelo2.esNoSingular(alfabeto5C));
-        System.out.println("El alfabeto7C es instantaneo: " + Modelo2.esNoSingular(alfabeto7C));
+        boolean esInst3C = Modelo2.esInstantaneo(alfabeto3C);
+        boolean esInst5C = Modelo2.esInstantaneo(alfabeto5C);
+        boolean esInst7C = Modelo2.esInstantaneo(alfabeto7C);
+
+//        System.out.println("\nEl alfabeto3C es instantaneo: " + Modelo2.esInstantaneo(alfabeto3C));
+//        System.out.println("El alfabeto5C es instantaneo: " + Modelo2.esInstantaneo(alfabeto5C));
+//        System.out.println("El alfabeto7C es instantaneo: " + Modelo2.esInstantaneo(alfabeto7C));
+
+        try {
+            Modelo2.generarArchivoIncisoB(esCodBlq3C, esCodBlq5C, esCodBlq7C,
+                                          esNoSing3C, esNoSing5C, esNoSing7C,
+                                          esInst3C, esInst5C, esInst7C);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
