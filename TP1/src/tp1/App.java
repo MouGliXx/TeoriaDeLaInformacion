@@ -1,5 +1,6 @@
 package tp1;
 
+import modelo.PrimeraParte;
 import modelo.SegundaParte;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,8 +22,16 @@ public class App {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         //PRIMERA PARTE
+        PrimeraParte primeraParte = new PrimeraParte(datos);
+
+//        try {
+//            System.out.println("Primera parte:");
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         //SEGUNDA PARTE
         SegundaParte segundaParte = new SegundaParte(datos);
@@ -31,6 +40,7 @@ public class App {
             System.out.println("Segunda parte:");
             segundaParte.generarArchivoIncisoA();
             segundaParte.generarArchivoIncisoB();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

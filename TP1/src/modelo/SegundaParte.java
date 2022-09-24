@@ -44,6 +44,7 @@ public class SegundaParte {
         esInst3C = esInstantaneo(codigo3C);
         esInst5C = esInstantaneo(codigo5C);
         esInst7C = esInstantaneo(codigo7C);
+
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -283,4 +284,6 @@ public class SegundaParte {
         bfwriter.close();
         fileWriter.close();
     }
+
+
 }

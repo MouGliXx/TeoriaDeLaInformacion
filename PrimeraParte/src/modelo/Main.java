@@ -8,20 +8,22 @@ public class Main {
         double[] vectorEstacionario;
         int n;
         String fileName, datos;
+
         fileName= "DatosTP1.txt";
         File url = new File (fileName);
         BufferedReader archivo = new BufferedReader(new FileReader(url));
         datos = archivo.readLine();
-        n = Model.cantidadSimbolos(datos) ;
+
+        n = Model.cantidadSimbolos(datos);
         matrizProbabilidades = Model.generarMatrizProbabilidades(datos,n);
 
-        double [][] m = new double[3][3];
+        double[][] m = new double[3][3];
         m[0][0]=0.2;m[0][1]=0.2;m[0][2]=0.2;
         m[1][0]=0.4;m[1][1]=0.4;m[1][2]=0.4;
         m[2][0]=0.4;m[2][1]=0.4;m[2][2]=0.4;
 
         System.out.println("Memoria No Nula " + Model.memoriaNoNula(m,n));
-        Model.mostrarMatriz(m,n);//matrizProbabilidades,n);
+        Model.mostrarMatriz(m,n);//(matrizProbabilidades,n);
 
         //System.out.format("Ergodica : %b \n",Model.ergodica(matrizProbabilidades,n));
 
