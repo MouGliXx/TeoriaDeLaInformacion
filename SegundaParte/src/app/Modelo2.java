@@ -107,7 +107,7 @@ public class Modelo2 {
         bfwriter.write("\nInformacion Alfabeto3C:\n");
         informacion3C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + "\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -116,7 +116,7 @@ public class Modelo2 {
         bfwriter.write("\nInformacion Alfabeto5C:\n");
         informacion5C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + "\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -125,16 +125,16 @@ public class Modelo2 {
         bfwriter.write("\nInformacion Alfabeto7C:\n");
         informacion7C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + "\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
         bfwriter.write("\nEntropia:\n");
-        bfwriter.write("\tH(Alfabeto3C) = " + entropia3C + "\n");
-        bfwriter.write("\tH(Alfabeto5C) = " + entropia5C + "\n");
-        bfwriter.write("\tH(Alfabeto7C) = " + entropia7C + "\n");
+        bfwriter.write("\tH(Alfabeto3C) = " + entropia3C + " bits\n");
+        bfwriter.write("\tH(Alfabeto5C) = " + entropia5C + " bits\n");
+        bfwriter.write("\tH(Alfabeto7C) = " + entropia7C + " bits\n");
 
         System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
