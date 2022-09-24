@@ -43,9 +43,9 @@ public class Main {
         /**
          * Obtengo las palabras codigo de la secuencia total
          * **/
-        ArrayList<String> alfabeto3C = Modelo2.identificaPalabrasCodigo(datos3C);
-        ArrayList<String> alfabeto5C = Modelo2.identificaPalabrasCodigo(datos5C);
-        ArrayList<String> alfabeto7C = Modelo2.identificaPalabrasCodigo(datos7C);
+        ArrayList<String> codigo3C = Modelo2.identificaPalabrasCodigo(datos3C);
+        ArrayList<String> codigo5C = Modelo2.identificaPalabrasCodigo(datos5C);
+        ArrayList<String> codigo7C = Modelo2.identificaPalabrasCodigo(datos7C);
 
 //        System.out.println(alfabeto3C.size());
 //        System.out.println(alfabeto5C.size());
@@ -76,9 +76,9 @@ public class Main {
         /**
          * Calculo la entropia de cada alfabeto con palabras de 3, 5 y 7 caracteres
          * **/
-        double entropia3C = Modelo2.calculaEntropia(alfabeto3C, informacion3C, frecuencias3C, datos3C.size());
-        double entropia5C = Modelo2.calculaEntropia(alfabeto5C,informacion5C, frecuencias5C, datos5C.size());
-        double entropia7C = Modelo2.calculaEntropia(alfabeto7C,informacion7C, frecuencias7C, datos7C.size());
+        double entropia3C = Modelo2.calculaEntropia(codigo3C, informacion3C, frecuencias3C, datos3C.size());
+        double entropia5C = Modelo2.calculaEntropia(codigo5C,informacion5C, frecuencias5C, datos5C.size());
+        double entropia7C = Modelo2.calculaEntropia(codigo7C,informacion7C, frecuencias7C, datos7C.size());
 
 //        System.out.println(entropia3C);
 //        System.out.println(entropia5C);
@@ -93,9 +93,9 @@ public class Main {
         /**
          * Verifico si los alfabetos son bloque
          * **/
-        boolean esCodBlq3C = Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size());
-        boolean esCodBlq5C = Modelo2.esCodigoBloque(simbolos, alfabeto5C, alfabeto5C.size());
-        boolean esCodBlq7C = Modelo2.esCodigoBloque(simbolos, alfabeto7C, alfabeto7C.size());
+        boolean esCodBlq3C = Modelo2.esCodigoBloque(simbolos, codigo3C, codigo3C.size());
+        boolean esCodBlq5C = Modelo2.esCodigoBloque(simbolos, codigo5C, codigo5C.size());
+        boolean esCodBlq7C = Modelo2.esCodigoBloque(simbolos, codigo7C, codigo7C.size());
 
 
 //        System.out.println("\nEl alfabeto3C es codigo bloque: " + Modelo2.esCodigoBloque(simbolos, alfabeto3C, alfabeto3C.size()));
@@ -105,9 +105,9 @@ public class Main {
         /**
          * Verifico si los alfabetos son NO singulares
          * **/
-        boolean esNoSing3C = Modelo2.esNoSingular(alfabeto3C);
-        boolean esNoSing5C = Modelo2.esNoSingular(alfabeto5C);
-        boolean esNoSing7C = Modelo2.esNoSingular(alfabeto7C);
+        boolean esNoSing3C = Modelo2.esNoSingular(codigo3C);
+        boolean esNoSing5C = Modelo2.esNoSingular(codigo5C);
+        boolean esNoSing7C = Modelo2.esNoSingular(codigo7C);
 
 //        System.out.println("\nEl alfabeto3C es NO singular: " + Modelo2.esNoSingular(alfabeto3C));
 //        System.out.println("El alfabeto5C es NO singular: " + Modelo2.esNoSingular(alfabeto5C));
@@ -116,9 +116,9 @@ public class Main {
         /**
          * Verifico si los alfabetos son instantaneos
          * **/
-        boolean esInst3C = Modelo2.esInstantaneo(alfabeto3C);
-        boolean esInst5C = Modelo2.esInstantaneo(alfabeto5C);
-        boolean esInst7C = Modelo2.esInstantaneo(alfabeto7C);
+        boolean esInst3C = Modelo2.esInstantaneo(codigo3C);
+        boolean esInst5C = Modelo2.esInstantaneo(codigo5C);
+        boolean esInst7C = Modelo2.esInstantaneo(codigo7C);
 
 //        System.out.println("\nEl alfabeto3C es instantaneo: " + Modelo2.esInstantaneo(alfabeto3C));
 //        System.out.println("El alfabeto5C es instantaneo: " + Modelo2.esInstantaneo(alfabeto5C));
