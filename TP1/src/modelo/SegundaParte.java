@@ -60,7 +60,7 @@ public class SegundaParte {
     }
 
     public ArrayList<String> diferenciaPalabras(String datos, int cantCaracteres) {
-        ArrayList<String> palabras = new ArrayList<>();
+        ArrayList<String> codigo = new ArrayList<>();
         String aux;
         int i = 0;
 
@@ -70,20 +70,20 @@ public class SegundaParte {
                 if (i + k < datos.length())
                     aux += datos.charAt(i + k);
             }
-            palabras.add(aux);
+            codigo.add(aux);
             i += cantCaracteres;
         }
 
         if (datos.length() % cantCaracteres != 0)
-            palabras.remove(palabras.size() - 1);
+            codigo.remove(codigo.size() - 1);
 
-        return palabras;
+        return codigo;
     }
 
-    public ArrayList<String> identificaPalabrasCodigo(ArrayList<String> palabras) {
+    public ArrayList<String> identificaPalabrasCodigo(ArrayList<String> codigo) {
         ArrayList<String> alfabeto = new ArrayList<>();
 
-        for (String palabra: palabras) {
+        for (String palabra: codigo) {
             if (!alfabeto.contains(palabra))
                 alfabeto.add(palabra);
         }
@@ -109,9 +109,9 @@ public class SegundaParte {
     public HashMap<String, Double> calculaInformacion(HashMap<String, Integer> frecuencias, int total) {
         HashMap<String, Double> informacion = new HashMap<>();
 
-        frecuencias.forEach((key, fr) -> {
+        frecuencias.forEach((palabra, fr) -> {
             double probabilidad = (double) fr / total;
-            informacion.put(key, log2(1 / probabilidad));
+            informacion.put(palabra, log2(1 / probabilidad));
         });
 
         return informacion;
@@ -195,10 +195,10 @@ public class SegundaParte {
         return true;
     }
 
-    public boolean esNoSingular(ArrayList<String> PalabraCodigo) {
+    public boolean esNoSingular(ArrayList<String> codigo) {
 
-        for (String palabra: PalabraCodigo) {
-            if (Collections.frequency(PalabraCodigo, palabra) != 1) {
+        for (String palabra: codigo) {
+            if (Collections.frequency(codigo, palabra) > 1) {
                 return false;
             }
         }

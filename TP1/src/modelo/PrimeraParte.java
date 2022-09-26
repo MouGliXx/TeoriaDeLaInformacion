@@ -1,17 +1,33 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class PrimeraParte {
+    private ArrayList<Character> simbolos;
+    private int n;
     private double[][] matrizProbabilidades;
     private double[] vectorEstacionario;
-    private int n;
     private boolean esErgodica, memoriaNoNula;
 
     public PrimeraParte(String datos) {
+        simbolos = extraeSimbolos(datos);
         n = datos.length();
         matrizProbabilidades = generarMatrizProbabilidades(datos, n);
         esErgodica = ergodica(matrizProbabilidades,  n);
         memoriaNoNula = memoriaNoNula(matrizProbabilidades,  n);
-        vectorEstacionario = calcularVector(matrizProbabilidades, n);
+        vectorEstacionario = calcularVector(matrizProbabilidades, simbolos.size());
+    }
+
+    public  ArrayList<Character> extraeSimbolos(String datos) {
+        ArrayList<Character> simbolos = new ArrayList<>();
+
+        for (int i = 0; i < datos.length(); i++) {
+            if (!simbolos.contains(datos.charAt(i))) {
+                simbolos.add(datos.charAt(i));
+            }
+        }
+
+        return simbolos;
     }
 
     public double[][] generarMatrizProbabilidades(String datos, int n) {
@@ -90,7 +106,7 @@ public class PrimeraParte {
 
     public double[] calcularVector (double[][] matriz, int n){
         double[] vectorEstacionario;
-        double[][] restaMatrices = restaMatrices(matriz,n);
+        double[][] restaMatrices = restaMatrices(matriz, n);
         double[][] matrizAmpliada = creaMatrizAmpliada(restaMatrices,n);
         matrizAmpliada = triangulacionGauss(matrizAmpliada,n);
         matrizAmpliada = imponerCondicion (matrizAmpliada,n);
