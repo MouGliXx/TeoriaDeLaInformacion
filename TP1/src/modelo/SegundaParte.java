@@ -136,7 +136,7 @@ public class SegundaParte {
 
         bfwriter.write("a) Calcular la cantidad de información y entropía.\n");
 
-        bfwriter.write("\nInformacion Alfabeto3C:\n");
+        bfwriter.write("\nInformacion Codigo3C:\n");
         informacion3C.forEach((key, inf) -> {
             try {
                 bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
@@ -145,7 +145,7 @@ public class SegundaParte {
             }
         });
 
-        bfwriter.write("\nInformacion Alfabeto5C:\n");
+        bfwriter.write("\nInformacion Codigo5C:\n");
         informacion5C.forEach((key, inf) -> {
             try {
                 bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
@@ -154,7 +154,7 @@ public class SegundaParte {
             }
         });
 
-        bfwriter.write("\nInformacion Alfabeto7C:\n");
+        bfwriter.write("\nInformacion Codigo7C:\n");
         informacion7C.forEach((key, inf) -> {
             try {
                 bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
@@ -164,9 +164,9 @@ public class SegundaParte {
         });
 
         bfwriter.write("\nEntropia:\n");
-        bfwriter.write("\tH(Alfabeto3C) = " + entropia3C + " bits\n");
-        bfwriter.write("\tH(Alfabeto5C) = " + entropia5C + " bits\n");
-        bfwriter.write("\tH(Alfabeto7C) = " + entropia7C + " bits\n");
+        bfwriter.write("\tH(Codigo3C) = " + entropia3C + " bits\n");
+        bfwriter.write("\tH(Codigo5C) = " + entropia5C + " bits\n");
+        bfwriter.write("\tH(Codigo7C) = " + entropia7C + " bits\n");
 
         System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
@@ -229,7 +229,7 @@ public class SegundaParte {
 
         bfwriter.write("b) Los códigos que se obtuvieron, ¿de que tipo son? Justificar su respuesta.\n");
 
-        bfwriter.write("\nAlfabeto3C:\n");
+        bfwriter.write("\nCodigo3C:\n");
         if (esCodBlq3C) {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing3C) {
@@ -246,7 +246,7 @@ public class SegundaParte {
             bfwriter.write("\tNo es codigo bloque.\n");
         }
 
-        bfwriter.write("\nAlfabeto5C:\n");
+        bfwriter.write("\nCodigo5C:\n");
         if (esCodBlq5C) {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing5C) {
@@ -263,7 +263,7 @@ public class SegundaParte {
             bfwriter.write("\tNo es codigo bloque.\n");
         }
 
-        bfwriter.write("\nAlfabeto7C:\n");
+        bfwriter.write("\nCodigo7C:\n");
         if (esCodBlq7C) {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing7C) {

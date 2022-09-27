@@ -1,16 +1,16 @@
 b) Los códigos que se obtuvieron, ¿de que tipo son? Justificar su respuesta.
 
-Alfabeto3C:
+Codigo3C:
 	Es codigo bloque.
 	Es no singular.
 	Es instantaneo.
 
-Alfabeto5C:
+Codigo5C:
 	Es codigo bloque.
 	Es no singular.
 	Es instantaneo.
 
-Alfabeto7C:
+Codigo7C:
 	Es codigo bloque.
 	Es no singular.
 	Es instantaneo.

@@ -1,6 +1,6 @@
 a) Calcular la cantidad de información y entropía.
 
-Informacion Alfabeto3C:
+Informacion Codigo3C:
 	I(ABA) = 4.542734265331859 bits
 	I(BBA) = 4.398824853933145 bits
 	I(ABB) = 5.030180260138753 bits
@@ -29,7 +29,7 @@ Informacion Alfabeto3C:
 	I(CAC) = 5.771868264547361 bits
 	I(CAB) = 5.636516411652476 bits
 
-Informacion Alfabeto5C:
+Informacion Codigo5C:
 	I(BAACA) = 8.158429362604483 bits
 	I(BBBBA) = 8.158429362604483 bits
 	I(BAACB) = 6.717856771218502 bits
@@ -271,7 +271,7 @@ Informacion Alfabeto5C:
 	I(ABBBB) = 8.643856189774725 bits
 	I(BCBCA) = 8.643856189774725 bits
 
-Informacion Alfabeto7C:
+Informacion Codigo7C:
 	I(CCCABAA) = 10.4797802640291 bits
 	I(CCCABAB) = 10.4797802640291 bits
 	I(ACCCCCA) = 10.4797802640291 bits
@@ -1213,6 +1213,6 @@ Informacion Alfabeto7C:
 	I(CBACCBB) = 10.4797802640291 bits
 
 Entropia:
-	H(Alfabeto3C) = 4.655807318179542 bits
-	H(Alfabeto5C) = 7.632041524304511 bits
-	H(Alfabeto7C) = 9.681246349203487 bits
+	H(Codigo3C) = 4.655807318179542 bits
+	H(Codigo5C) = 7.632041524304511 bits
+	H(Codigo7C) = 9.681246349203487 bits
