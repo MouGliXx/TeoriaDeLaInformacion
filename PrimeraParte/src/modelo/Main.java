@@ -9,7 +9,7 @@ public class Main {
         double[] vectorEstacionario;
         String fileName, datos;
         fileName = "DatosTP1.txt";
-        File url = new File(fileName);
+        File url = new File(fileName)   ;
         BufferedReader archivo = new BufferedReader(new FileReader(url));
         datos = archivo.readLine();
 

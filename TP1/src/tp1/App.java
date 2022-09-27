@@ -13,37 +13,45 @@ public class App {
         BufferedReader archivo;
         String inputFileName, datos = null;
 
-        inputFileName = "DatosTP1.txt";
+        inputFileName = "../DatosTP1.txt";
         File url = new File(inputFileName);
 
         try {
             archivo = new BufferedReader(new FileReader(url));
             datos = archivo.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        //PRIMERA PARTE
-        PrimeraParte primeraParte = new PrimeraParte(datos);
+            //PRIMERA PARTE
+            PrimeraParte primeraParte = new PrimeraParte(datos);
+            System.out.println("Primera parte:");
+            try {
+                primeraParte.generarArchivoIncisoA();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso A");
+            }
+            try {
+                primeraParte.generarArchivoIncisoC();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso C");
+            }
 
-//        try {
-//            System.out.println("Primera parte:");
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
-        //SEGUNDA PARTE
-        SegundaParte segundaParte = new SegundaParte(datos);
-
-        try {
+            //SEGUNDA PARTE
+            SegundaParte segundaParte = new SegundaParte(datos);
             System.out.println("Segunda parte:");
-            segundaParte.generarArchivoIncisoA();
-            segundaParte.generarArchivoIncisoB();
+            try {
+                segundaParte.generarArchivoIncisoA();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso A");
+            }
+            try {
+                segundaParte.generarArchivoIncisoB();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso B");
+            }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Archivo no encontrado");
         }
     }
+
 }

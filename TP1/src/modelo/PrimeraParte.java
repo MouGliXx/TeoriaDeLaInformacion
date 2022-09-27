@@ -1,5 +1,9 @@
 package modelo;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -47,24 +51,6 @@ public class PrimeraParte {
                     matrizI[f][c] = 0.;
             }
         return matrizI;
-    }
-
-    public void mostrarMatriz(double[][] matriz) {
-        int f=0, c;
-        char [] llaves = new char[n];
-        for (Map.Entry<Character,Integer> entry : simbolos.entrySet()) {
-            System.out.format("       %c    ", entry.getKey());
-            llaves[f] = entry.getKey();
-            f +=1;
-        }
-        System.out.println();
-        for (f = 0; f < n; f++) {
-            System.out.format("%c  ", llaves[f]);
-            for (c = 0; c < n; c++) {
-                System.out.format(" %f  ", matriz[f][c]);
-            }
-            System.out.format("\n");
-        }
     }
 
     public boolean ergodica(double[][] matriz) {
@@ -180,12 +166,6 @@ public class PrimeraParte {
         return vectorEstacionario;
     }
 
-    public void mostrarVector(double[] vectorEstacionario) {
-        int t;
-        for (t = 0; t<n;t++)
-            System.out.format("%f  ",vectorEstacionario[t]);
-    }
-
     public double calcularEntropia(double[][]matrizProbabilidades, double[]vectorEstacionario){
         int i,j;
         double entropia = 0., suma, log2;
@@ -202,4 +182,56 @@ public class PrimeraParte {
         }
         return entropia;
     }
+
+    public void generarArchivoIncisoA() throws IOException {
+        int f=0, c;
+        char [] llaves = new char[n];
+        FileWriter fileWriter;
+
+        fileWriter = new FileWriter("../Archivos Generados/Primera Parte/IncisoA.txt",false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("MATRIZ DE PROBABILIDADES CONDICIONALES\n");
+
+
+        for (Map.Entry<Character,Integer> entry : simbolos.entrySet()) {
+            bfwriter.write("                  "+ entry.getKey());
+            llaves[f] = entry.getKey();
+            f +=1;
+        }
+        bfwriter.write("\n");
+        for (f = 0; f < n; f++) {
+            bfwriter.write(llaves[f]);
+            for (c = 0; c < n; c++) {
+                bfwriter.write("    "+matrizProbabilidades[f][c]);
+            }
+            bfwriter.write("\n");
+        }
+
+        bfwriter.write("\nFUENTE DE MEMORIA NO NULA: "+this.esMemoriaNula);
+        System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoC() throws IOException {
+        int t;
+        FileWriter fileWriter;
+
+        fileWriter = new FileWriter("../Archivos Generados/Primera Parte/IncisoC.txt",false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("\nFUENTE ERGODICA : "+this.esErgodica+"\n");
+        bfwriter.write("\nVECTOR ESTACIONARIO : \n");
+        bfwriter.write("\n");
+        for (t = 0; t<n;t++)
+            bfwriter.write(" V"+t+"    "+vectorEstacionario[t]+"\n");
+
+        bfwriter.write("\n");
+        bfwriter.write("\nENTROPIA DE LA FUENTE: "+this.entropia);
+        System.out.println("Archivo 'IncisoC.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
 }
