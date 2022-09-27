@@ -127,6 +127,7 @@ public class Model {
         }
         return filaIguales;
     }
+
     public static double[][] triangulacionGauss(double[][] matrizAmpliada) {
         int i, j, t, r;
         for (i = 0; i < n; i++) {

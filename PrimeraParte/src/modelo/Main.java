@@ -12,6 +12,7 @@ public class Main {
         File url = new File(fileName);
         BufferedReader archivo = new BufferedReader(new FileReader(url));
         datos = archivo.readLine();
+
         Model.generaHashSimbolos(datos);
         matrizProbabilidades = Model.generarMatrizProbabilidades(datos);
 

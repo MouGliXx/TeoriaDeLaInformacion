@@ -284,6 +284,4 @@ public class SegundaParte {
         bfwriter.close();
         fileWriter.close();
     }
-
-
 }
