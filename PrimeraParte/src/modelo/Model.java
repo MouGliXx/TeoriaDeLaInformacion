@@ -1,49 +1,55 @@
 package modelo;
 
+import java.util.*;
+
 public class Model {
+    private static int n;
+    private static final TreeMap<Character,Integer> simbolos = new TreeMap<>();
 
-    public static double[][] generarMatrizProbabilidades(String datos, int n) {
+    private static void setN(int n) {
+        Model.n = n;
+    }
+
+    public static double[][] generarMatrizProbabilidades(String datos) {
         double[][] prob = new double[n][n];
-        int t, q;
+        int i, j, fila, columna;
         int[] totales = new int[n];
-        for (t = 2; t < datos.length(); t++)
-            prob[caracterAindice(datos.charAt(t))][caracterAindice(datos.charAt(t - 1))] += 1;
-
-        for (t = 0; t < 3; t++) {
-            totales[t] = (int) (prob[0][t] + prob[1][t] + prob[2][t]);
+        for (i = 1; i < datos.length(); i++) {
+            columna = simbolos.get(datos.charAt(i));
+            fila = simbolos.get(datos.charAt(i-1));
+            prob[fila][columna] += 1;
+            totales[columna] +=1;
         }
-
-        for (t = 0; t < 3; t++)
-            for (q = 0; q < 3; q++)
-                prob[q][t] /= totales[q];
-
+        for (i = 0; i < n; i++)
+            for (j = 0; j < n; j++)
+                prob[i][j] /= totales[j];
         return prob;
     }
 
-    public static int caracterAindice(char a) {
-        int indice = -1;
-        if (a == 'A') indice = 0;
-        if (a == 'B') indice = 1;
-        if (a == 'C') indice = 2;
-        return indice;
-    }
-
-    public static double[][] generarMatrizIdentidad(int a) {
-        double[][] matrizI = new double[a][a];
+    private static double[][] generarMatrizIdentidad() {
+        double[][] matrizI = new double[n][n];
         int f, c;
-        for (f = 0; f < a; f++)
-            for (c = 0; c < a; c++) {
+        for (f = 0; f < n; f++)
+            for (c = 0; c < n; c++) {
                 if (f == c)
-                    matrizI[f][c] = 1;
+                    matrizI[f][c] = 1.;
                 else
-                    matrizI[f][c] = 0;
+                    matrizI[f][c] = 0.;
             }
         return matrizI;
     }
 
-    public static void mostrarMatriz(double[][] matriz, int n) {
-        int f, c;
+    public static void mostrarMatriz(double[][] matriz) {
+        int f=0, c;
+        char [] llaves = new char[n];
+        for (Map.Entry<Character,Integer> entry : simbolos.entrySet()) {
+            System.out.format("       %c    ", entry.getKey());
+            llaves[f] = entry.getKey();
+            f +=1;
+        }
+        System.out.println();
         for (f = 0; f < n; f++) {
+            System.out.format("%c  ", llaves[f]);
             for (c = 0; c < n; c++) {
                 System.out.format(" %f  ", matriz[f][c]);
             }
@@ -51,16 +57,15 @@ public class Model {
         }
     }
 
-    public static boolean ergodica(double[][] matriz, int n) {
+    public static boolean ergodica(double[][] matriz) {
         int f, c = 0;
         double suma;
         boolean ergodica = true;
         while (ergodica && c < n) {
             suma = 0;
-            for (f = 0; f < n; f++) {
+            for (f = 0; f < n; f++)
                 if (f != c)
                     suma += matriz[f][c];
-            }
             if (suma == 0)
                 ergodica = false;
             c += 1;
@@ -68,40 +73,48 @@ public class Model {
         return ergodica;
     }
 
-    public static int cantidadSimbolos(String datos) {
-        return 3;
+    public static void generaHashSimbolos(String datos) {
+        int t,c=0;
+        char letra;
+        for (t = 1; t <datos.length(); t++) {
+            letra = datos.charAt(t);
+            if (!(simbolos.containsKey(letra))) {
+                simbolos.put(letra, c);
+                c += 1;
+            }
+        }
+        Model.setN(simbolos.size());
     }
 
-    public static double[][] restaMatrices(double[][] matrizProbabilidades, int n) {
+    public static double[][] restaMatrices(double[][] matrizProbabilidades) {
         int i,j;
         double[][] restaMatrices = new double[n][n];
-        double[][] matrizIdentidad = generarMatrizIdentidad(n);
+        double[][] matrizIdentidad = generarMatrizIdentidad();
         for (i = 0; i < n; i++)
             for (j = 0; j < n; j++)
                 restaMatrices[i][j] = matrizProbabilidades[i][j] - matrizIdentidad [i][j];
         return restaMatrices;
     }
 
-    public static double[] calcularVector (double[][] matriz, int n){
+    public static double[] calcularVector (double[][] matriz){
         double[] vectorEstacionario;
-        double[][] restaMatrices = restaMatrices(matriz,n);
-        double[][] matrizAmpliada = creaMatrizAmpliada(restaMatrices,n);
-        matrizAmpliada = triangulacionGauss(matrizAmpliada,n);
-        matrizAmpliada = imponerCondicion (matrizAmpliada,n);
-        matrizAmpliada = triangulacionGauss(matrizAmpliada,n);
-        vectorEstacionario = sustitucionRegresiva(matrizAmpliada,n);
+        double[][] restaMatrices = restaMatrices(matriz);
+        double[][] matrizAmpliada = creaMatrizAmpliada(restaMatrices);
+        matrizAmpliada = triangulacionGauss(matrizAmpliada);
+        matrizAmpliada = imponerCondicion (matrizAmpliada);
+        matrizAmpliada = triangulacionGauss(matrizAmpliada);
+        vectorEstacionario = sustitucionRegresiva(matrizAmpliada);
         return vectorEstacionario;
     }
 
-    public static double[][] imponerCondicion (double[][]matriz, int n){
+    public static double[][] imponerCondicion (double[][]matriz){
         int t;
-        for (t = 0; t<= n; t++){
+        for (t = 0; t<= n; t++)
             matriz[n-1][t] = 1.;
-        }
         return matriz;
     }
 
-    public static boolean memoriaNoNula (double[][] matriz, int n){
+    public static boolean memoriaNoNula (double[][] matriz){
         boolean filaIguales = false;
         int f = 0,c = 0;
         while (f<n && !filaIguales){
@@ -114,7 +127,7 @@ public class Model {
         }
         return filaIguales;
     }
-    public static double[][] triangulacionGauss(double[][] matrizAmpliada, int n) {
+    public static double[][] triangulacionGauss(double[][] matrizAmpliada) {
         int i, j, t, r;
         for (i = 0; i < n; i++) {
             for (t = i + 1; t < n + 1 ; t++)
@@ -129,20 +142,18 @@ public class Model {
         return matrizAmpliada;
     }
 
-    private static double[][] creaMatrizAmpliada(double[][] matriz, int n){
+    private static double[][] creaMatrizAmpliada(double[][] matriz){
         int f,c;
         double[][] mAmpliada = new double[n][n+1];
         for (f = 0; f < n; f++)
             for (c = 0; c < n; c++)
                 mAmpliada[f][c] = matriz[f][c];
-        //for (f = 0; f < n; f++)
-        mAmpliada[0][n]=0.;
-        mAmpliada[1][n]=0.;
-        mAmpliada[2][n]=0.;
+        for (f = 0; f < n; f++)
+            mAmpliada[f][n]=0.;
         return mAmpliada;
     }
 
-    private static double[] sustitucionRegresiva(double[][] matrizAmpliada, int n){
+    private static double[] sustitucionRegresiva(double[][] matrizAmpliada){
         double suma;
         int f,c;
         double[] vectorEstacionario = new double[n];
@@ -156,11 +167,26 @@ public class Model {
         return vectorEstacionario;
     }
 
-
-    public static void mostrarVector(double[] vectorEstacionario, int n) {
+    public static void mostrarVector(double[] vectorEstacionario) {
         int t;
         for (t = 0; t<n;t++)
             System.out.format("%f  ",vectorEstacionario[t]);
+    }
 
+    public static double calcularEntropia(double[][]matrizProbabilidades, double[]vectorEstacionario){
+        int i,j;
+        double entropia = 0., suma, log2;
+        for(i = 0; i < n; i++){
+            suma = 0.;
+            for (j = 0; j < n; j++){
+                if (matrizProbabilidades[j][i] != 0)
+                    log2 = Math.log(1/matrizProbabilidades[j][i])/Math.log(2);
+                else
+                    log2 = 0.;
+                suma += matrizProbabilidades[j][i]*log2;
+            }
+            entropia += (vectorEstacionario[i]*suma);
+        }
+        return entropia;
     }
 }
