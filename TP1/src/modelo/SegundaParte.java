@@ -18,6 +18,7 @@ public class SegundaParte {
     private boolean esCodBlq3C, esCodBlq5C, esCodBlq7C;
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
+    private boolean cumpleKraftMcMillan;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -46,6 +47,11 @@ public class SegundaParte {
         esInst3C = esInstantaneo(codigo3C);
         esInst5C = esInstantaneo(codigo5C);
         esInst7C = esInstantaneo(codigo7C);
+        cumpleKraftMcMillan=cumpleKraftMcMillan(codigo7C,simbolos);
+        if (cumpleKraftMcMillan)
+            System.out.println("Cumple Kraft McMillan");
+        else
+            System.out.println("No cumple Kraft McMillan");
 
     }
 
@@ -297,5 +303,23 @@ public class SegundaParte {
         System.out.println("Archivo 'IncisoB.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
+    }
+
+    public boolean cumpleKraftMcMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
+        double numeroCadenasSinRepetir=codigo.size();
+        double cantidadCaracteres=simbolos.size();
+        double longitudCadena;
+        double resultado;
+        if (codigo.isEmpty())
+            return false;
+        else {
+            longitudCadena = codigo.get(0).length();
+            System.out.println("La longitud de cadena es: "+longitudCadena);
+            System.out.println("El numero de cadenas sin repetir es: "+numeroCadenasSinRepetir);
+            System.out.println("La cantidad de caracteres es: "+cantidadCaracteres);
+            resultado=numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena);
+            System.out.println("El resultado es: "+resultado);
+            return numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena) <= 1;
+        }
     }
 }
