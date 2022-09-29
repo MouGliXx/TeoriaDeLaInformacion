@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 
 public class SegundaParte {
+    String sistemaOperativo;
     private ArrayList<Character> simbolos;
     private ArrayList<String> datos3C, datos5C, datos7C;
     private ArrayList<String> codigo3C, codigo5C, codigo7C;
@@ -19,6 +20,7 @@ public class SegundaParte {
     private boolean esInst3C, esInst5C, esInst7C;
 
     public SegundaParte(String datos) {
+        sistemaOperativo = System.getProperty("os.name");
         simbolos = extraeSimbolos(datos);
         datos3C = diferenciaPalabras(datos, 3);
         datos5C = diferenciaPalabras(datos, 5);
@@ -129,9 +131,15 @@ public class SegundaParte {
     }
 
     public void generarArchivoIncisoA() throws IOException {
+        String outputFileName;
         FileWriter fileWriter;
 
-        fileWriter = new FileWriter("Archivos Generados/Segunda Parte/IncisoA.txt", false);
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoA.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoA.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
         bfwriter.write("a) Calcular la cantidad de información y entropía.\n");
@@ -222,9 +230,15 @@ public class SegundaParte {
     }
 
     public void generarArchivoIncisoB() throws IOException {
+        String outputFileName;
         FileWriter fileWriter;
 
-        fileWriter = new FileWriter("Archivos Generados/Segunda Parte/IncisoB.txt", false);
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoB.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoB.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
         bfwriter.write("b) Los códigos que se obtuvieron, ¿de que tipo son? Justificar su respuesta.\n");

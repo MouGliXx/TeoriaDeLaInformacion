@@ -209,8 +209,8 @@ public class PrimeraParte {
 
     public void generarArchivoIncisoA() throws IOException {
         int f = 0, c;
-        String outputFileName;
         char [] llaves = new char[n];
+        String outputFileName;
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
@@ -239,6 +239,7 @@ public class PrimeraParte {
         }
 
         bfwriter.write("\nFUENTE DE MEMORIA NO NULA: "+this.esMemoriaNula);
+
         System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
@@ -260,11 +261,13 @@ public class PrimeraParte {
         bfwriter.write("\nFUENTE ERGODICA : "+this.esErgodica+"\n");
         bfwriter.write("\nVECTOR ESTACIONARIO : \n");
         bfwriter.write("\n");
+
         for (t = 0; t<n;t++)
             bfwriter.write(" V"+t+"    "+vectorEstacionario[t]+"\n");
 
         bfwriter.write("\n");
         bfwriter.write("\nENTROPIA DE LA FUENTE: "+this.entropia);
+
         System.out.println("Archivo 'IncisoC.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
