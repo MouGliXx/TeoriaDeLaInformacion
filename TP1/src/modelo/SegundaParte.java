@@ -18,7 +18,8 @@ public class SegundaParte {
     private boolean esCodBlq3C, esCodBlq5C, esCodBlq7C;
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
-    private boolean cumpleKraftMcMillan;
+    private double kraftMcMillan3C, kraftMcMillan5C, kraftMcMillan7C;
+    private boolean esCompacto3C, esCompacto5C, esCompacto7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -47,10 +48,15 @@ public class SegundaParte {
         esInst3C = esInstantaneo(codigo3C);
         esInst5C = esInstantaneo(codigo5C);
         esInst7C = esInstantaneo(codigo7C);
-        cumpleKraftMcMillan=cumpleKraftMcMillan(codigo7C,simbolos);
-        longitudmedia3C=longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
-        longitudmedia5C=longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
-        longitudmedia7C=longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
+        kraftMcMillan3C = inecuacionKraftMacMillan(codigo3C,simbolos);
+        kraftMcMillan5C = inecuacionKraftMacMillan(codigo5C,simbolos);
+        kraftMcMillan7C = inecuacionKraftMacMillan(codigo7C,simbolos);
+        longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
+        longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
+        longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
+        esCompacto3C = esCompacto(entropia3C, longitudmedia3C);
+        esCompacto5C = esCompacto(entropia5C, longitudmedia5C);
+        esCompacto7C = esCompacto(entropia7C, longitudmedia7C);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -180,7 +186,7 @@ public class SegundaParte {
         bfwriter.write("\tH(Codigo5C) = " + entropia5C + " bits\n");
         bfwriter.write("\tH(Codigo7C) = " + entropia7C + " bits\n");
 
-        System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
@@ -298,32 +304,21 @@ public class SegundaParte {
             bfwriter.write("\tNo es codigo bloque.\n");
         }
 
-        System.out.println("Archivo 'IncisoB.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoB.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
 
-    public boolean cumpleKraftMcMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
-        double numeroCadenasSinRepetir=codigo.size();
-        double cantidadCaracteres=simbolos.size();
-        double longitudCadena;
-        double resultado;
-        if (codigo.isEmpty())
-            return false;
-        else {
-            longitudCadena = codigo.get(0).length();
-            System.out.println("La longitud de cadena es: "+longitudCadena);
-            System.out.println("El numero de cadenas sin repetir es: "+numeroCadenasSinRepetir);
-            System.out.println("La cantidad de caracteres es: "+cantidadCaracteres);
-            resultado=numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena);
-            System.out.println("El resultado es: "+resultado);
-            return numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena) <= 1;
-        }
+    public double inecuacionKraftMacMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
+        double cantidadPalabras = codigo.size();
+        double cantidadCaracteres = simbolos.size();
+        double longitudCadena = codigo.get(0).length();
+
+        return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
     }
 
     public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
-        double longitudMedia=0;
-        double longitudCadena;
+        double longitudCadena, longitudMedia = 0;
 
         if (codigo.isEmpty())
             return 0;
@@ -334,7 +329,55 @@ public class SegundaParte {
             double probabilidad = (double) frecuencias.get(key) / total;
             longitudMedia+=probabilidad*longitudCadena;
         }
-        System.out.println("La longitud media es: "+longitudMedia);
+
         return longitudMedia;
+    }
+
+    public boolean esCompacto(double entropia, double longitudMedia) {
+        return entropia <= longitudMedia;
+    }
+
+    public void generarArchivoIncisoC() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoC.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoC.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("c) Establecer en cada caso la Inecuación de Kraft, MacMillan, Longitud Media del código y si\n" +
+                           "cumplen con la condición de ser compactos. Obtener conclusiones.\n");
+
+        bfwriter.write("\nCodigo3C:\n");
+        bfwriter.write("\tInecuacion Kraft-MacMillan = " + kraftMcMillan3C + ((kraftMcMillan3C <= 1) ? " (<=1 cumple condicion)\n" : "(no cumple condicion)\n"));
+        bfwriter.write("\tLongitud media = " + longitudmedia3C + "\n");
+        if (esCompacto3C)
+            bfwriter.write("\tEl codigo es compacto.\n");
+        else
+            bfwriter.write("\tEl codigo no es compacto.\n");
+
+        bfwriter.write("\nCodigo5C:\n");
+        bfwriter.write("\tInecuacion Kraft-MacMillan = " + kraftMcMillan5C + ((kraftMcMillan5C <= 1) ? " (<=1 cumple condicion)\n" : "(no cumple condicion)\n"));
+        bfwriter.write("\tLongitud media = " + longitudmedia5C + "\n");
+        if (esCompacto5C)
+            bfwriter.write("\tEl codigo es compacto.\n");
+        else
+            bfwriter.write("\tEl codigo no es compacto.\n");
+
+        bfwriter.write("\nCodigo7C:\n");
+        bfwriter.write("\tInecuacion Kraft-MacMillan = " + kraftMcMillan7C + ((kraftMcMillan7C <= 1) ? " (<=1 cumple condicion)\n" : "(no cumple condicion)\n"));
+        bfwriter.write("\tLongitud media = " + longitudmedia7C + "\n");
+        if (esCompacto7C)
+            bfwriter.write("\tEl codigo es compacto.\n");
+        else
+            bfwriter.write("\tEl codigo no es compacto.\n");
+
+        System.out.println("\tArchivo 'IncisoC.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
     }
 }

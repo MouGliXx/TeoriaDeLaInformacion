@@ -240,7 +240,7 @@ public class PrimeraParte {
 
         bfwriter.write("\nFUENTE DE MEMORIA NO NULA: "+this.esMemoriaNula);
 
-        System.out.println("Archivo 'IncisoA.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
@@ -268,9 +268,8 @@ public class PrimeraParte {
         bfwriter.write("\n");
         bfwriter.write("\nENTROPIA DE LA FUENTE: "+this.entropia);
 
-        System.out.println("Archivo 'IncisoC.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoC.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
-
 }
