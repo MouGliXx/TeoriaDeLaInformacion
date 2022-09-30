@@ -14,7 +14,7 @@ public class SegundaParte {
     private ArrayList<String> codigo3C, codigo5C, codigo7C;
     private HashMap<String, Integer> frecuencias3C, frecuencias5C, frecuencias7C;
     private HashMap<String, Double> informacion3C, informacion5C, informacion7C;
-    private double entropia3C, entropia5C, entropia7C;
+    private double entropia3C, entropia5C, entropia7C,longitudmedia3C,longitudmedia5C,longitudmedia7C;
     private boolean esCodBlq3C, esCodBlq5C, esCodBlq7C;
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
@@ -48,11 +48,9 @@ public class SegundaParte {
         esInst5C = esInstantaneo(codigo5C);
         esInst7C = esInstantaneo(codigo7C);
         cumpleKraftMcMillan=cumpleKraftMcMillan(codigo7C,simbolos);
-        if (cumpleKraftMcMillan)
-            System.out.println("Cumple Kraft McMillan");
-        else
-            System.out.println("No cumple Kraft McMillan");
-
+        longitudmedia3C=longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
+        longitudmedia5C=longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
+        longitudmedia7C=longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -321,5 +319,22 @@ public class SegundaParte {
             System.out.println("El resultado es: "+resultado);
             return numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena) <= 1;
         }
+    }
+
+    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
+        double longitudMedia=0;
+        double longitudCadena;
+
+        if (codigo.isEmpty())
+            return 0;
+
+        longitudCadena = codigo.get(0).length();
+
+        for (String key : codigo) {
+            double probabilidad = (double) frecuencias.get(key) / total;
+            longitudMedia+=probabilidad*longitudCadena;
+        }
+        System.out.println("La longitud media es: "+longitudMedia);
+        return longitudMedia;
     }
 }
