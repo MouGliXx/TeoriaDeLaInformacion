@@ -38,9 +38,9 @@ public class SegundaParte {
         entropia3C = calculaEntropia(codigo3C, informacion3C, frecuencias3C, datos3C.size());
         entropia5C = calculaEntropia(codigo5C, informacion5C, frecuencias5C, datos5C.size());
         entropia7C = calculaEntropia(codigo7C, informacion7C, frecuencias7C, datos7C.size());
-        esCodBlq3C = esCodigoBloque(simbolos, codigo3C, codigo3C.size());
-        esCodBlq5C = esCodigoBloque(simbolos, codigo5C, codigo5C.size());
-        esCodBlq7C = esCodigoBloque(simbolos, codigo7C, codigo7C.size());
+        esCodBlq3C = esCodigoBloque(simbolos, codigo3C);
+        esCodBlq5C = esCodigoBloque(simbolos, codigo5C);
+        esCodBlq7C = esCodigoBloque(simbolos, codigo7C);
         esNoSing3C = esNoSingular(codigo3C);
         esNoSing5C = esNoSingular(codigo5C);
         esNoSing7C = esNoSingular(codigo7C);
@@ -123,10 +123,10 @@ public class SegundaParte {
         return informacion;
     }
 
-    public double calculaEntropia(ArrayList<String> alfabeto, HashMap<String, Double> informacion, HashMap<String, Integer> frecuencias, int total) {
+    public double calculaEntropia(ArrayList<String> codigo, HashMap<String, Double> informacion, HashMap<String, Integer> frecuencias, int total) {
         double resultado = 0;
 
-        for (String key : alfabeto) {
+        for (String key : codigo) {
             double probabilidad = (double) frecuencias.get(key) / total;
             resultado += informacion.get(key) * probabilidad;
         }
@@ -196,10 +196,10 @@ public class SegundaParte {
         return true;
     }
 
-    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> PalabraCodigo, int NS) {
+    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> codigo) {
 
-        for (int i = 0; i < NS; i++) {
-            if (PalabraCodigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, PalabraCodigo.get(i))) {
+        for (int i = 0; i < codigo.size(); i++) {
+            if (codigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, codigo.get(i))) {
                 return false;
             }
         }
@@ -218,10 +218,10 @@ public class SegundaParte {
         return true;
     }
 
-    public boolean esInstantaneo(ArrayList<String> PalabraCodigo) {
+    public boolean esInstantaneo(ArrayList<String> codigo) {
 
-        for (String palabra_prefijo: PalabraCodigo) {
-            for (String palabra_iterada: PalabraCodigo) {
+        for (String palabra_prefijo: codigo) {
+            for (String palabra_iterada: codigo) {
                 if (!palabra_prefijo.equals(palabra_iterada)) {
                     if (palabra_iterada.startsWith(palabra_prefijo)) {
                         return false;
