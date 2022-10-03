@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SegundaParte {
     String sistemaOperativo;
@@ -14,11 +15,14 @@ public class SegundaParte {
     private ArrayList<String> codigo3C, codigo5C, codigo7C;
     private HashMap<String, Integer> frecuencias3C, frecuencias5C, frecuencias7C;
     private HashMap<String, Double> informacion3C, informacion5C, informacion7C;
+    private Map<String,String> arbolHuffman;
     private double entropia3C, entropia5C, entropia7C,longitudmedia3C,longitudmedia5C,longitudmedia7C;
     private boolean esCodBlq3C, esCodBlq5C, esCodBlq7C;
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
-    private boolean cumpleKraftMcMillan;
+    private boolean cumpleKraftMcMillan3,cumpleKraftMcMillan5,cumpleKraftMcMillan7;
+    private double calcularendimiento3C,calcularendimiento5C,calcularendimiento7C;
+    private double calcularedundancia3C,calcularedundancia5C,calcularedundancia7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -47,10 +51,18 @@ public class SegundaParte {
         esInst3C = esInstantaneo(codigo3C);
         esInst5C = esInstantaneo(codigo5C);
         esInst7C = esInstantaneo(codigo7C);
-        cumpleKraftMcMillan=cumpleKraftMcMillan(codigo7C,simbolos);
+        cumpleKraftMcMillan3=cumpleKraftMcMillan(codigo3C,simbolos);
+        cumpleKraftMcMillan5=cumpleKraftMcMillan(codigo5C,simbolos);
+        cumpleKraftMcMillan7=cumpleKraftMcMillan(codigo7C,simbolos);
         longitudmedia3C=longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C=longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C=longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
+        calcularendimiento3C=calculaRendimiento(entropia3C,3);
+        calcularendimiento5C=calculaRendimiento(entropia5C,5);
+        calcularendimiento7C=calculaRendimiento(entropia7C,7);
+        calcularedundancia3C=calculaRedundancia(calcularendimiento3C);
+        calcularedundancia5C=calculaRedundancia(calcularendimiento5C);
+        calcularedundancia7C=calculaRedundancia(calcularendimiento7C);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -130,6 +142,8 @@ public class SegundaParte {
             double probabilidad = (double) frecuencias.get(key) / total;
             resultado += informacion.get(key) * probabilidad;
         }
+
+        System.out.println("La entropia es: "+resultado);
 
         return resultado;
     }
@@ -312,11 +326,8 @@ public class SegundaParte {
             return false;
         else {
             longitudCadena = codigo.get(0).length();
-            System.out.println("La longitud de cadena es: "+longitudCadena);
-            System.out.println("El numero de cadenas sin repetir es: "+numeroCadenasSinRepetir);
-            System.out.println("La cantidad de caracteres es: "+cantidadCaracteres);
             resultado=numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena);
-            System.out.println("El resultado es: "+resultado);
+            System.out.println("El resultado de Kraft-McMillan es: "+resultado);
             return numeroCadenasSinRepetir * Math.pow(cantidadCaracteres, -longitudCadena) <= 1;
         }
     }
@@ -336,5 +347,15 @@ public class SegundaParte {
         }
         System.out.println("La longitud media es: "+longitudMedia);
         return longitudMedia;
+    }
+
+    public double calculaRendimiento(double entropia ,int largo){
+        System.out.println("El rendimiento es: "+entropia/largo);
+        return entropia/largo;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        System.out.println("El rendimiento es: "+ (1-rendimiento));
+        return 1-rendimiento;
     }
 }
