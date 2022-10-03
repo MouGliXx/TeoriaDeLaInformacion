@@ -55,11 +55,11 @@ public class App {
             } catch (IOException e) {
                 System.out.println("NO se pudo generar el archivo del Inciso B");
             }
-//            try {
-//                segundaParte.generarArchivoIncisoC();
-//            } catch (IOException e) {
-//                System.out.println("NO se pudo generar el archivo del Inciso C");
-//            }
+            try {
+                segundaParte.generarArchivoIncisoC();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso C");
+            }
 //            try {
 //                segundaParte.generarArchivoIncisoD();
 //            } catch (IOException e) {
