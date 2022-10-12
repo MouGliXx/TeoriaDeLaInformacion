@@ -3,9 +3,9 @@ package modelo;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
+
+import static modelo.Huffman.construyeArbolHuffman;
 
 public class SegundaParte {
     String sistemaOperativo;
@@ -21,6 +21,7 @@ public class SegundaParte {
     private boolean esInst3C, esInst5C, esInst7C;
     private double kraftMcMillan3C, kraftMcMillan5C, kraftMcMillan7C;
     private boolean esCompacto3C, esCompacto5C, esCompacto7C;
+    private Map<String,String> arbolHuffman;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -59,6 +60,9 @@ public class SegundaParte {
         esCompacto3C = esCompacto(entropia3C, longitudmedia3C);
         esCompacto5C = esCompacto(entropia5C, longitudmedia5C);
         esCompacto7C = esCompacto(entropia7C, longitudmedia7C);
+        arbolHuffman=construyeArbolHuffman(frecuencias3C);
+        imprimeArbolHuffman(arbolHuffman);
+
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -337,6 +341,12 @@ public class SegundaParte {
 
     public boolean esCompacto(double entropia, double longitudMedia) {
         return entropia <= longitudMedia;
+    }
+
+    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
+        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+        }
     }
 
     public void generarArchivoIncisoC() throws IOException {
