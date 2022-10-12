@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class SegundaParte {
     String sistemaOperativo;
     private ArrayList<Character> simbolos;
+    private int orden;
     private ArrayList<String> datos3C, datos5C, datos7C;
     private ArrayList<String> codigo3C, codigo5C, codigo7C;
     private HashMap<String, Integer> frecuencias3C, frecuencias5C, frecuencias7C;
@@ -24,6 +25,7 @@ public class SegundaParte {
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
         simbolos = extraeSimbolos(datos);
+        orden = simbolos.size();
         datos3C = diferenciaPalabras(datos, 3);
         datos5C = diferenciaPalabras(datos, 5);
         datos7C = diferenciaPalabras(datos, 7);
@@ -114,8 +116,8 @@ public class SegundaParte {
         return frecuencias;
     }
 
-    public double log2(double x) {
-        return Math.log(x) / Math.log(2);
+    public double logOrden(double x) {
+        return Math.log(x) / Math.log(orden);
     }
 
     public HashMap<String, Double> calculaInformacion(HashMap<String, Integer> frecuencias, int total) {
@@ -123,7 +125,7 @@ public class SegundaParte {
 
         frecuencias.forEach((palabra, fr) -> {
             double probabilidad = (double) fr / total;
-            informacion.put(palabra, log2(1 / probabilidad));
+            informacion.put(palabra, logOrden(1 / probabilidad));
         });
 
         return informacion;
@@ -157,7 +159,7 @@ public class SegundaParte {
         bfwriter.write("\nInformacion Codigo3C:\n");
         informacion3C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -166,7 +168,7 @@ public class SegundaParte {
         bfwriter.write("\nInformacion Codigo5C:\n");
         informacion5C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -175,16 +177,16 @@ public class SegundaParte {
         bfwriter.write("\nInformacion Codigo7C:\n");
         informacion7C.forEach((key, inf) -> {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " bits\n");
+                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
         bfwriter.write("\nEntropia:\n");
-        bfwriter.write("\tH(Codigo3C) = " + entropia3C + " bits\n");
-        bfwriter.write("\tH(Codigo5C) = " + entropia5C + " bits\n");
-        bfwriter.write("\tH(Codigo7C) = " + entropia7C + " bits\n");
+        bfwriter.write("\tH(Codigo3C) = " + entropia3C + " unidades de orden " + orden + "\n");
+        bfwriter.write("\tH(Codigo5C) = " + entropia5C + " unidades de orden " + orden + "\n");
+        bfwriter.write("\tH(Codigo7C) = " + entropia7C + " unidades de orden " + orden + "\n");
 
         System.out.println("\tArchivo 'IncisoA.txt' modificado satisfactoriamente...");
         bfwriter.close();
