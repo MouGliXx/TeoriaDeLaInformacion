@@ -54,6 +54,7 @@ public class Huffman {
 
         while(it.hasNext()){
             colaDatos.add(new Nodo(it.next(),datos.get(it.next())));
+            it.next();
         }
 
         while(colaDatos.size()>1){
