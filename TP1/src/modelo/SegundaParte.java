@@ -21,6 +21,8 @@ public class SegundaParte {
     private boolean esInst3C, esInst5C, esInst7C;
     private double kraftMcMillan3C, kraftMcMillan5C, kraftMcMillan7C;
     private boolean esCompacto3C, esCompacto5C, esCompacto7C;
+    private double rendimiento3C, rendimiento5C, rendimiento7C;
+    private double redundancia3C, redundancia5C, redundancia7C;
     private Map<String,String> arbolHuffman;
 
     public SegundaParte(String datos) {
@@ -60,9 +62,14 @@ public class SegundaParte {
         esCompacto3C = esCompacto(entropia3C, longitudmedia3C);
         esCompacto5C = esCompacto(entropia5C, longitudmedia5C);
         esCompacto7C = esCompacto(entropia7C, longitudmedia7C);
-        arbolHuffman=construyeArbolHuffman(frecuencias3C);
+        rendimiento3C = calculaRendimiento(entropia3C,3);
+        rendimiento5C = calculaRendimiento(entropia5C,5);
+        rendimiento7C = calculaRendimiento(entropia7C,7);
+        redundancia3C = calculaRedundancia(rendimiento3C);
+        redundancia5C = calculaRedundancia(rendimiento5C);
+        redundancia7C = calculaRedundancia(rendimiento7C);
+        arbolHuffman = construyeArbolHuffman(frecuencias3C);
         imprimeArbolHuffman(arbolHuffman);
-
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -343,6 +350,16 @@ public class SegundaParte {
         return entropia <= longitudMedia;
     }
 
+    public double calculaRendimiento(double entropia ,int largo) {
+        System.out.println("El rendimiento es: " + entropia / largo);
+        return entropia / largo;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        System.out.println("El rendimiento es: "+ (1-rendimiento));
+        return 1-rendimiento;
+    }
+
     public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
         for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
             System.out.println(entry.getKey() + ":" + entry.getValue().toString());
@@ -389,6 +406,59 @@ public class SegundaParte {
             bfwriter.write("\tEl codigo no es compacto.\n");
 
         System.out.println("\tArchivo 'IncisoC.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoD() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoD.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoD.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("d) Determinar el rendimiento y redundancia de cada código.\n");
+
+        bfwriter.write("\nCodigo3C:\n");
+        bfwriter.write("\tRendimiento: " + rendimiento3C + "\n");
+        bfwriter.write("\tRedundancia: " + redundancia3C + "\n");
+
+        bfwriter.write("\nCodigo5C:\n");
+        bfwriter.write("\tRendimiento: " + rendimiento5C + "\n");
+        bfwriter.write("\tRedundancia: " + redundancia5C + "\n");
+
+        bfwriter.write("\nCodigo7C:\n");
+        bfwriter.write("\tRendimiento: " + rendimiento7C + "\n");
+        bfwriter.write("\tRedundancia: " + redundancia7C + "\n");
+
+        System.out.println("\tArchivo 'IncisoD.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoE() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
+                           "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
+
+        /// CODIGO ACA
+
+        System.out.println("\tArchivo 'IncisoD.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
