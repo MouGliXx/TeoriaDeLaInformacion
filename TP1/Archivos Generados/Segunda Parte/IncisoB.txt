@@ -3,14 +3,17 @@ b) Los códigos que se obtuvieron, ¿de que tipo son? Justificar su respuesta.
 Codigo3C:
 	Es codigo bloque.
 	Es no singular.
+	Es univocamente decodificable.
 	Es instantaneo.
 
 Codigo5C:
 	Es codigo bloque.
 	Es no singular.
+	Es univocamente decodificable.
 	Es instantaneo.
 
 Codigo7C:
 	Es codigo bloque.
 	Es no singular.
+	Es univocamente decodificable.
 	Es instantaneo.

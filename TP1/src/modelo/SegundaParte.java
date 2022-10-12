@@ -20,6 +20,7 @@ public class SegundaParte {
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
     private double kraftMcMillan3C, kraftMcMillan5C, kraftMcMillan7C;
+    private boolean esUnivoco3C, esUnivoco5C, esUnivoco7C;
     private boolean esCompacto3C, esCompacto5C, esCompacto7C;
     private double rendimiento3C, rendimiento5C, rendimiento7C;
     private double redundancia3C, redundancia5C, redundancia7C;
@@ -56,6 +57,9 @@ public class SegundaParte {
         kraftMcMillan3C = inecuacionKraftMacMillan(codigo3C,simbolos);
         kraftMcMillan5C = inecuacionKraftMacMillan(codigo5C,simbolos);
         kraftMcMillan7C = inecuacionKraftMacMillan(codigo7C,simbolos);
+        esUnivoco3C = esunivoco(kraftMcMillan3C);
+        esUnivoco5C = esunivoco(kraftMcMillan5C);
+        esUnivoco7C = esunivoco(kraftMcMillan7C);
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
@@ -153,6 +157,100 @@ public class SegundaParte {
         return resultado;
     }
 
+    public boolean simbolosCorrectos(ArrayList<Character> simbolos, String palabra) {
+
+        for (int i = 0; i < palabra.length(); i++) {
+            if (!simbolos.contains(palabra.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> codigo) {
+
+        for (int i = 0; i < codigo.size(); i++) {
+            if (codigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, codigo.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esNoSingular(ArrayList<String> codigo) {
+
+        for (String palabra: codigo) {
+            if (Collections.frequency(codigo, palabra) > 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esInstantaneo(ArrayList<String> codigo) {
+
+        for (String palabra_prefijo: codigo) {
+            for (String palabra_iterada: codigo) {
+                if (!palabra_prefijo.equals(palabra_iterada)) {
+                    if (palabra_iterada.startsWith(palabra_prefijo)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public double inecuacionKraftMacMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
+        double cantidadPalabras = codigo.size();
+        double cantidadCaracteres = simbolos.size();
+        double longitudCadena = codigo.get(0).length();
+
+        return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
+    }
+
+    public boolean esunivoco(double inecuacionKraft) {
+        return (inecuacionKraft <= 1);
+    }
+
+    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
+        double longitudCadena, longitudMedia = 0;
+
+        if (codigo.isEmpty())
+            return 0;
+
+        longitudCadena = codigo.get(0).length();
+
+        for (String key : codigo) {
+            double probabilidad = (double) frecuencias.get(key) / total;
+            longitudMedia+=probabilidad*longitudCadena;
+        }
+
+        return longitudMedia;
+    }
+
+    public boolean esCompacto(double entropia, double longitudMedia) {
+        return entropia <= longitudMedia;
+    }
+
+    public double calculaRendimiento(double entropia ,int largo) {
+        return entropia / largo;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        return 1-rendimiento;
+    }
+
+    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
+        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+        }
+    }
+
     public void generarArchivoIncisoA() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
@@ -204,54 +302,6 @@ public class SegundaParte {
         fileWriter.close();
     }
 
-    public boolean simbolosCorrectos(ArrayList<Character> simbolos, String palabra) {
-
-        for (int i = 0; i < palabra.length(); i++) {
-            if (!simbolos.contains(palabra.charAt(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> codigo) {
-
-        for (int i = 0; i < codigo.size(); i++) {
-            if (codigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, codigo.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esNoSingular(ArrayList<String> codigo) {
-
-        for (String palabra: codigo) {
-            if (Collections.frequency(codigo, palabra) > 1) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esInstantaneo(ArrayList<String> codigo) {
-
-        for (String palabra_prefijo: codigo) {
-            for (String palabra_iterada: codigo) {
-                if (!palabra_prefijo.equals(palabra_iterada)) {
-                    if (palabra_iterada.startsWith(palabra_prefijo)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     public void generarArchivoIncisoB() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
@@ -271,10 +321,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing3C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst3C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco3C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst3C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -288,10 +343,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing5C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst5C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco5C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst5C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -305,10 +365,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing7C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst7C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco7C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst7C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -320,50 +385,6 @@ public class SegundaParte {
         System.out.println("\tArchivo 'IncisoB.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
-    }
-
-    public double inecuacionKraftMacMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
-        double cantidadPalabras = codigo.size();
-        double cantidadCaracteres = simbolos.size();
-        double longitudCadena = codigo.get(0).length();
-
-        return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
-    }
-
-    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
-        double longitudCadena, longitudMedia = 0;
-
-        if (codigo.isEmpty())
-            return 0;
-
-        longitudCadena = codigo.get(0).length();
-
-        for (String key : codigo) {
-            double probabilidad = (double) frecuencias.get(key) / total;
-            longitudMedia+=probabilidad*longitudCadena;
-        }
-
-        return longitudMedia;
-    }
-
-    public boolean esCompacto(double entropia, double longitudMedia) {
-        return entropia <= longitudMedia;
-    }
-
-    public double calculaRendimiento(double entropia ,int largo) {
-        System.out.println("El rendimiento es: " + entropia / largo);
-        return entropia / largo;
-    }
-
-    public double calculaRedundancia(double rendimiento){
-        System.out.println("El rendimiento es: "+ (1-rendimiento));
-        return 1-rendimiento;
-    }
-
-    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
-        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
-        }
     }
 
     public void generarArchivoIncisoC() throws IOException {
