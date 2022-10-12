@@ -57,9 +57,9 @@ public class SegundaParte {
         kraftMcMillan3C = inecuacionKraftMacMillan(codigo3C,simbolos);
         kraftMcMillan5C = inecuacionKraftMacMillan(codigo5C,simbolos);
         kraftMcMillan7C = inecuacionKraftMacMillan(codigo7C,simbolos);
-        esUnivoco3C = esunivoco(kraftMcMillan3C);
-        esUnivoco5C = esunivoco(kraftMcMillan5C);
-        esUnivoco7C = esunivoco(kraftMcMillan7C);
+        esUnivoco3C = esUnivoco(kraftMcMillan3C);
+        esUnivoco5C = esUnivoco(kraftMcMillan5C);
+        esUnivoco7C = esUnivoco(kraftMcMillan7C);
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
@@ -213,7 +213,7 @@ public class SegundaParte {
         return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
     }
 
-    public boolean esunivoco(double inecuacionKraft) {
+    public boolean esUnivoco(double inecuacionKraft) {
         return (inecuacionKraft <= 1);
     }
 
