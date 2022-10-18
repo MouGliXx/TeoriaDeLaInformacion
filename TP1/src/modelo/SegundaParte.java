@@ -20,18 +20,17 @@ public class SegundaParte {
     private boolean  esNoSing3C, esNoSing5C, esNoSing7C;
     private boolean esInst3C, esInst5C, esInst7C;
     private double kraftMcMillan3C, kraftMcMillan5C, kraftMcMillan7C;
+    private boolean esUnivoco3C, esUnivoco5C, esUnivoco7C;
     private boolean esCompacto3C, esCompacto5C, esCompacto7C;
     private double rendimiento3C, rendimiento5C, rendimiento7C;
     private double redundancia3C, redundancia5C, redundancia7C;
-    private Map<String,String> arbolHuffman3C,arbolHuffman5C,arbolHuffman7C;
-    private String reconstruccion3C,reconstruccion5C,reconstruccion7C;
+    private Map<String,String> arbolHuffman;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
         simbolos = extraeSimbolos(datos);
         orden = simbolos.size();
         datos3C = diferenciaPalabras(datos, 3);
-        System.out.println(datos3C);
         datos5C = diferenciaPalabras(datos, 5);
         datos7C = diferenciaPalabras(datos, 7);
         codigo3C = identificaPalabrasCodigo(datos3C);
@@ -58,6 +57,9 @@ public class SegundaParte {
         kraftMcMillan3C = inecuacionKraftMacMillan(codigo3C,simbolos);
         kraftMcMillan5C = inecuacionKraftMacMillan(codigo5C,simbolos);
         kraftMcMillan7C = inecuacionKraftMacMillan(codigo7C,simbolos);
+        esUnivoco3C = esUnivoco(kraftMcMillan3C);
+        esUnivoco5C = esUnivoco(kraftMcMillan5C);
+        esUnivoco7C = esUnivoco(kraftMcMillan7C);
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
@@ -70,12 +72,8 @@ public class SegundaParte {
         redundancia3C = calculaRedundancia(rendimiento3C);
         redundancia5C = calculaRedundancia(rendimiento5C);
         redundancia7C = calculaRedundancia(rendimiento7C);
-        arbolHuffman3C = construyeArbolHuffman(frecuencias3C);
-        arbolHuffman5C = construyeArbolHuffman(frecuencias5C);
-        arbolHuffman7C = construyeArbolHuffman(frecuencias7C);
-        reconstruccion3C=reconstruyeArbolOriginalCodificado(arbolHuffman3C,datos3C);
-        reconstruccion5C=reconstruyeArbolOriginalCodificado(arbolHuffman5C,datos5C);
-        reconstruccion7C=reconstruyeArbolOriginalCodificado(arbolHuffman7C,datos7C);
+        arbolHuffman = construyeArbolHuffman(frecuencias3C);
+        imprimeArbolHuffman(arbolHuffman);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -156,9 +154,101 @@ public class SegundaParte {
             resultado += informacion.get(key) * probabilidad;
         }
 
-        System.out.println("La entropia es: "+resultado);
-
         return resultado;
+    }
+
+    public boolean simbolosCorrectos(ArrayList<Character> simbolos, String palabra) {
+
+        for (int i = 0; i < palabra.length(); i++) {
+            if (!simbolos.contains(palabra.charAt(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> codigo) {
+
+        for (int i = 0; i < codigo.size(); i++) {
+            if (codigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, codigo.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esNoSingular(ArrayList<String> codigo) {
+
+        for (String palabra: codigo) {
+            if (Collections.frequency(codigo, palabra) > 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean esInstantaneo(ArrayList<String> codigo) {
+
+        for (String palabra_prefijo: codigo) {
+            for (String palabra_iterada: codigo) {
+                if (!palabra_prefijo.equals(palabra_iterada)) {
+                    if (palabra_iterada.startsWith(palabra_prefijo)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public double inecuacionKraftMacMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
+        double cantidadPalabras = codigo.size();
+        double cantidadCaracteres = simbolos.size();
+        double longitudCadena = codigo.get(0).length();
+
+        return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
+    }
+
+    public boolean esUnivoco(double inecuacionKraft) {
+        return (inecuacionKraft <= 1);
+    }
+
+    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
+        double longitudCadena, longitudMedia = 0;
+
+        if (codigo.isEmpty())
+            return 0;
+
+        longitudCadena = codigo.get(0).length();
+
+        for (String key : codigo) {
+            double probabilidad = (double) frecuencias.get(key) / total;
+            longitudMedia+=probabilidad*longitudCadena;
+        }
+
+        return longitudMedia;
+    }
+
+    public boolean esCompacto(double entropia, double longitudMedia) {
+        return entropia <= longitudMedia;
+    }
+
+    public double calculaRendimiento(double entropia ,int largo) {
+        return entropia / largo;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        return 1-rendimiento;
+    }
+
+    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
+        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
+            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+        }
     }
 
     public void generarArchivoIncisoA() throws IOException {
@@ -212,54 +302,6 @@ public class SegundaParte {
         fileWriter.close();
     }
 
-    public boolean simbolosCorrectos(ArrayList<Character> simbolos, String palabra) {
-
-        for (int i = 0; i < palabra.length(); i++) {
-            if (!simbolos.contains(palabra.charAt(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esCodigoBloque(ArrayList<Character> simbolos, ArrayList<String> codigo) {
-
-        for (int i = 0; i < codigo.size(); i++) {
-            if (codigo.get(i).isEmpty() || !simbolosCorrectos(simbolos, codigo.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esNoSingular(ArrayList<String> codigo) {
-
-        for (String palabra: codigo) {
-            if (Collections.frequency(codigo, palabra) > 1) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean esInstantaneo(ArrayList<String> codigo) {
-
-        for (String palabra_prefijo: codigo) {
-            for (String palabra_iterada: codigo) {
-                if (!palabra_prefijo.equals(palabra_iterada)) {
-                    if (palabra_iterada.startsWith(palabra_prefijo)) {
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
     public void generarArchivoIncisoB() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
@@ -279,10 +321,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing3C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst3C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco3C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst3C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -296,10 +343,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing5C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst5C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco5C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst5C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -313,10 +365,15 @@ public class SegundaParte {
             bfwriter.write("\tEs codigo bloque.\n");
             if (esNoSing7C) {
                 bfwriter.write("\tEs no singular.\n");
-                if (esInst7C) {
-                    bfwriter.write("\tEs instantaneo.\n");
+                if (esUnivoco7C) {
+                    bfwriter.write("\tEs univocamente decodificable.\n");
+                    if (esInst7C) {
+                        bfwriter.write("\tEs instantaneo.\n");
+                    } else {
+                        bfwriter.write("\tNo es instantaneo.\n");
+                    }
                 } else {
-                    bfwriter.write("\tNo es instantaneo.\n");
+                    bfwriter.write("\tNo es univocamente decodificable.\n");
                 }
             } else {
                 bfwriter.write("\tEs singular.\n");
@@ -328,60 +385,6 @@ public class SegundaParte {
         System.out.println("\tArchivo 'IncisoB.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
-    }
-
-    public double inecuacionKraftMacMillan(ArrayList<String> codigo,ArrayList<Character> simbolos){
-        double cantidadPalabras = codigo.size();
-        double cantidadCaracteres = simbolos.size();
-        double longitudCadena = codigo.get(0).length();
-
-        return (codigo.isEmpty()) ? -1 : cantidadPalabras * Math.pow(cantidadCaracteres, -longitudCadena);
-    }
-
-    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, ArrayList<String> codigo){
-        double longitudCadena, longitudMedia = 0;
-
-        if (codigo.isEmpty())
-            return 0;
-
-        longitudCadena = codigo.get(0).length();
-
-        for (String key : codigo) {
-            double probabilidad = (double) frecuencias.get(key) / total;
-            longitudMedia+=probabilidad*longitudCadena;
-        }
-
-        return longitudMedia;
-    }
-
-    public boolean esCompacto(double entropia, double longitudMedia) {
-        return entropia <= longitudMedia;
-    }
-
-    public double calculaRendimiento(double entropia ,int largo) {
-        System.out.println("El rendimiento es: " + entropia / largo);
-        return entropia / largo;
-    }
-
-    public double calculaRedundancia(double rendimiento){
-        System.out.println("La redundancia es: "+ (1-rendimiento));
-        return 1-rendimiento;
-    }
-
-    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
-        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
-        }
-    }
-
-    public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
-        String reconstruccion="";
-        for (String cadena : cadenas) {
-
-            reconstruccion += arbolHuffman.get(cadena);
-        }
-        System.out.println(reconstruccion);
-        return reconstruccion;
     }
 
     public void generarArchivoIncisoC() throws IOException {
@@ -459,14 +462,14 @@ public class SegundaParte {
         fileWriter.close();
     }
 
-    public void generarArchivoIncisoE1() throws IOException {
+    public void generarArchivoIncisoE() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.txt";
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE.txt";
         else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE1.txt";
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -474,56 +477,9 @@ public class SegundaParte {
         bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
                            "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
 
-        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman3C + "\n");
-        bfwriter.write("\tReconstruccion archivo original: " + reconstruccion3C + "\n");
+        /// CODIGO ACA
 
-        System.out.println("\tArchivo 'IncisoE1.txt' modificado satisfactoriamente...");
-        bfwriter.close();
-        fileWriter.close();
-    }
-
-    public void generarArchivoIncisoE2() throws IOException {
-        String outputFileName;
-        FileWriter fileWriter;
-
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE2.txt";
-
-        fileWriter = new FileWriter(outputFileName, false);
-        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
-
-        bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
-                "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
-
-        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman5C + "\n");
-        bfwriter.write("\tReconstruccion archivo original: " + reconstruccion5C + "\n");
-
-        System.out.println("\tArchivo 'IncisoE2.txt' modificado satisfactoriamente...");
-        bfwriter.close();
-        fileWriter.close();
-    }
-
-    public void generarArchivoIncisoE3() throws IOException {
-        String outputFileName;
-        FileWriter fileWriter;
-
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE3.txt";
-
-        fileWriter = new FileWriter(outputFileName, false);
-        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
-
-        bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
-                "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
-
-        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman7C + "\n");
-        bfwriter.write("\tReconstruccion archivo original: " + reconstruccion7C + "\n");
-
-        System.out.println("\tArchivo 'IncisoE3.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoD.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }
