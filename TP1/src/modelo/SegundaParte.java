@@ -8,7 +8,7 @@ import java.util.*;
 import static modelo.Huffman.construyeArbolHuffman;
 
 public class SegundaParte {
-    String sistemaOperativo;
+    private String sistemaOperativo;
     private ArrayList<Character> simbolos;
     private int orden;
     private ArrayList<String> datos3C, datos5C, datos7C;
@@ -247,7 +247,7 @@ public class SegundaParte {
 
     public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
         for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+            System.out.println(entry.getKey() + ":" + entry.getValue());
         }
     }
 
