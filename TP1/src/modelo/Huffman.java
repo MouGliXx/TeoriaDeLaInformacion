@@ -2,10 +2,10 @@ package modelo;
 
 import java.util.*;
 
-class Nodo{
+class Nodo {
     String cadena;
     Integer frecuencia;
-    Nodo izq=null,der=null;
+    Nodo izq = null, der = null;
 
     public Nodo(String cadena, Integer frecuencia, Nodo izq, Nodo der) {
         this.cadena = cadena;
@@ -52,10 +52,12 @@ public class Huffman {
 
         Iterator<String> it=datos.keySet().iterator();
 
+
         while(it.hasNext()){
-            colaDatos.add(new Nodo(it.next(),datos.get(it.next())));
-            it.next();
+            String key=it.next();
+            colaDatos.add(new Nodo(key, datos.get(key)));
         }
+
 
         while(colaDatos.size()>1){
             Nodo izq=colaDatos.poll();
