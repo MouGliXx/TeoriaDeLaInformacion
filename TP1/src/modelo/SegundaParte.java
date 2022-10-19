@@ -1,6 +1,7 @@
 package modelo;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -24,7 +25,8 @@ public class SegundaParte {
     private boolean esCompacto3C, esCompacto5C, esCompacto7C;
     private double rendimiento3C, rendimiento5C, rendimiento7C;
     private double redundancia3C, redundancia5C, redundancia7C;
-    private Map<String,String> arbolHuffman;
+    private Map<String,String> arbolHuffman3C,arbolHuffman5C,arbolHuffman7C;
+    private String reconstruccion3C,reconstruccion5C,reconstruccion7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -72,8 +74,12 @@ public class SegundaParte {
         redundancia3C = calculaRedundancia(rendimiento3C);
         redundancia5C = calculaRedundancia(rendimiento5C);
         redundancia7C = calculaRedundancia(rendimiento7C);
-        arbolHuffman = construyeArbolHuffman(frecuencias3C);
-        imprimeArbolHuffman(arbolHuffman);
+        arbolHuffman3C = construyeArbolHuffman(frecuencias3C);
+        arbolHuffman5C = construyeArbolHuffman(frecuencias5C);
+        arbolHuffman7C = construyeArbolHuffman(frecuencias7C);
+        reconstruccion3C=reconstruyeArbolOriginalCodificado(arbolHuffman3C,datos3C);
+        reconstruccion5C=reconstruyeArbolOriginalCodificado(arbolHuffman5C,datos5C);
+        reconstruccion7C=reconstruyeArbolOriginalCodificado(arbolHuffman7C,datos7C);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -245,10 +251,13 @@ public class SegundaParte {
         return 1-rendimiento;
     }
 
-    public void imprimeArbolHuffman(Map<String,String> arbolHuffman){
-        for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-            System.out.println(entry.getKey() + ":" + entry.getValue().toString());
+    public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
+        String reconstruccion="";
+        for (String cadena : cadenas) {
+
+            reconstruccion += arbolHuffman.get(cadena);
         }
+        return reconstruccion;
     }
 
     public void generarArchivoIncisoA() throws IOException {
@@ -462,24 +471,214 @@ public class SegundaParte {
         fileWriter.close();
     }
 
-    public void generarArchivoIncisoE() throws IOException {
+    public void generarArchivoIncisoE1() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE.txt";
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.txt";
         else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE.txt";
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE1.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
         bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
-                           "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
+                "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
 
-        /// CODIGO ACA
+        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman3C + "\n");
 
-        System.out.println("\tArchivo 'IncisoD.txt' modificado satisfactoriamente...");
+        System.out.println("\tArchivo 'IncisoE1.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoE1binario() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.dat";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE1.dat";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        byte aux;
+        byte ochoBits;
+        int limite,i,n=0;
+
+
+        while (n<(reconstruccion3C.length()-1)) {
+            if(reconstruccion3C.length()-n-1>8)
+                limite=8;
+            else
+                limite=reconstruccion3C.length()-n-1;
+            i=0;
+            ochoBits=0b0;
+            while(i<limite) {
+                if (reconstruccion3C.charAt(n) == '1') {
+                    aux = 0b1;
+                    ochoBits = (byte) (ochoBits << 1);
+                    ochoBits |= (aux);
+                }
+                else
+                    ochoBits= (byte) (ochoBits<<1);
+                i++;
+                n++;
+
+            }
+            bfwriter.write(ochoBits);
+        }
+
+
+        System.out.println("\tArchivo 'IncisoE1.dat' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+
+
+    public void generarArchivoIncisoE2() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE2.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
+                "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
+
+        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman5C + "\n");
+
+        System.out.println("\tArchivo 'IncisoE2.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public static String toBinary(byte n, int len)
+    {
+        String binary = "";
+        for (long i = (1L << len - 1); i > 0; i = i / 2) {
+            binary += (n & i) != 0 ? "1" : "0";
+        }
+        return binary;
+    }
+
+    public void generarArchivoIncisoE2binario() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.dat";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE2.dat";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        byte aux;
+        byte ochoBits;
+        int limite,i,n=0;
+
+
+        while (n<(reconstruccion5C.length()-1)) {
+            if(reconstruccion5C.length()-n-1>8)
+                limite=8;
+            else
+                limite=reconstruccion5C.length()-n-1;
+            i=0;
+            ochoBits=0b0;
+            while(i<limite) {
+                if (reconstruccion5C.charAt(n) == '1') {
+                    aux = 0b1;
+                    ochoBits = (byte) (ochoBits << 1);
+                    ochoBits |= (aux);
+                }
+                else
+                    ochoBits= (byte) (ochoBits<<1);
+                i++;
+                n++;
+
+            }
+            bfwriter.write(ochoBits);
+        }
+
+
+        System.out.println("\tArchivo 'IncisoE2.dat' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoE3() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.txt";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE3.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        bfwriter.write("e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)\n" +
+                "y reconstruir el archivo (en tres archivos, uno por codificación).\n");
+
+        bfwriter.write("\tArbol Huffman: \n" + arbolHuffman7C + "\n");
+
+        System.out.println("\tArchivo 'IncisoE3.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
+    public void generarArchivoIncisoE3binario() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.dat";
+        else
+            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE3.dat";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        byte aux;
+        byte ochoBits;
+        int limite,i,n=0;
+
+
+        while (n<(reconstruccion7C.length()-1)) {
+            if(reconstruccion7C.length()-n-1>8)
+                limite=8;
+            else
+                limite=reconstruccion7C.length()-n-1;
+            i=0;
+            ochoBits=0b0;
+            while(i<limite) {
+                if (reconstruccion7C.charAt(n) == '1') {
+                    aux = 0b1;
+                    ochoBits = (byte) (ochoBits << 1);
+                    ochoBits |= (aux);
+                }
+                else
+                    ochoBits= (byte) (ochoBits<<1);
+                i++;
+                n++;
+
+            }
+            bfwriter.write(ochoBits);
+        }
+
+
+        System.out.println("\tArchivo 'IncisoE3.dat' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
     }

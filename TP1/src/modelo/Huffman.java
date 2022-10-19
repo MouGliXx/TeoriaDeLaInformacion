@@ -71,6 +71,7 @@ public class Huffman {
         Nodo raiz=colaDatos.peek();
         encode(raiz,"",huffman);
 
+
         return huffman;
 
     }

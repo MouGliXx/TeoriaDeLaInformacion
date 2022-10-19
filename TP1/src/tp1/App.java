@@ -71,12 +71,27 @@ public class App {
                 System.out.println("NO se pudo generar el archivo del Inciso E");
             }
             try {
-                segundaParte.generarArchivoIncisoE2();
+                segundaParte.generarArchivoIncisoE1binario();
             } catch (IOException e) {
                 System.out.println("NO se pudo generar el archivo del Inciso E");
             }
             try {
+                segundaParte.generarArchivoIncisoE2();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo de texto del Inciso E");
+            }
+            try {
+                segundaParte.generarArchivoIncisoE2binario();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo binario del Inciso E");
+            }
+            try {
                 segundaParte.generarArchivoIncisoE3();
+            } catch (IOException e) {
+                System.out.println("NO se pudo generar el archivo del Inciso E");
+            }
+            try {
+                segundaParte.generarArchivoIncisoE3binario();
             } catch (IOException e) {
                 System.out.println("NO se pudo generar el archivo del Inciso E");
             }
