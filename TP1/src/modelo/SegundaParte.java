@@ -9,7 +9,7 @@ import java.util.*;
 import static modelo.Huffman.construyeArbolHuffman;
 
 public class SegundaParte {
-    String sistemaOperativo;
+    private String sistemaOperativo;
     private ArrayList<Character> simbolos;
     private int orden;
     private ArrayList<String> datos3C, datos5C, datos7C;
@@ -250,7 +250,7 @@ public class SegundaParte {
     public double calculaRedundancia(double rendimiento){
         return 1-rendimiento;
     }
-
+    
     public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
         String reconstruccion="";
         for (String cadena : cadenas) {
