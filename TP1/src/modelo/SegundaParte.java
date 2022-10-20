@@ -1,7 +1,6 @@
 package modelo;
 
 import java.io.BufferedWriter;
-import java.io.DataOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -538,8 +537,6 @@ public class SegundaParte {
         fileWriter.close();
     }
 
-
-
     public void generarArchivoIncisoE2() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
@@ -560,15 +557,6 @@ public class SegundaParte {
         System.out.println("\tArchivo 'IncisoE2.txt' modificado satisfactoriamente...");
         bfwriter.close();
         fileWriter.close();
-    }
-
-    public static String toBinary(byte n, int len)
-    {
-        String binary = "";
-        for (long i = (1L << len - 1); i > 0; i = i / 2) {
-            binary += (n & i) != 0 ? "1" : "0";
-        }
-        return binary;
     }
 
     public void generarArchivoIncisoE2binario() throws IOException {
