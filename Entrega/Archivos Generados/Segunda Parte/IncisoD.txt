@@ -1,0 +1,13 @@
+d) Determinar el rendimiento y redundancia de cada código.
+
+Codigo3C:
+	Rendimiento: 0.9791624546450685
+	Redundancia: 0.02083754535493154
+
+Codigo5C:
+	Rendimiento: 0.9630564156353142
+	Redundancia: 0.03694358436468581
+
+Codigo7C:
+	Rendimiento: 0.8725980533382092
+	Redundancia: 0.12740194666179083
