@@ -1,2 +1,0 @@
-e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)
-y reconstruir el archivo (en tres archivos, uno por codificación).
