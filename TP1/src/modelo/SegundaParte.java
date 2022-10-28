@@ -27,6 +27,7 @@ public class SegundaParte {
     private double redundancia3C, redundancia5C, redundancia7C;
     private Map<String,String> arbolHuffman3C,arbolHuffman5C,arbolHuffman7C;
     private String reconstruccion3C,reconstruccion5C,reconstruccion7C;
+    private int cadenasPosibles3C,cadenasPosibles5C,cadenasPosibles7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -65,9 +66,12 @@ public class SegundaParte {
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
-        esCompacto3C = esCompacto(entropia3C, longitudmedia3C);
-        esCompacto5C = esCompacto(entropia5C, longitudmedia5C);
-        esCompacto7C = esCompacto(entropia7C, longitudmedia7C);
+        cadenasPosibles3C = (int) Math.pow(3,3);
+        cadenasPosibles5C = (int) Math.pow(3,5);
+        cadenasPosibles7C = (int) Math.pow(3,7);
+        esCompacto3C = esCompacto(cadenasPosibles3C, frecuencias3C);
+        esCompacto5C = esCompacto(cadenasPosibles5C, frecuencias5C);
+        esCompacto7C = esCompacto(cadenasPosibles7C, frecuencias7C);
         rendimiento3C = calculaRendimiento(entropia3C,3);
         rendimiento5C = calculaRendimiento(entropia5C,5);
         rendimiento7C = calculaRendimiento(entropia7C,7);
@@ -239,8 +243,16 @@ public class SegundaParte {
         return longitudMedia;
     }
 
-    public boolean esCompacto(double entropia, double longitudMedia) {
-        return entropia <= longitudMedia;
+    public boolean esCompacto(int cadenasPosibles,HashMap<String, Integer> frecuencias) {
+        System.out.println("Frecuencias: "+frecuencias);
+        double frecuenciaEquiprobable=(double) 1 / cadenasPosibles;
+        System.out.println(frecuencias.size());
+        for (String clave : frecuencias.keySet()) {
+            if (frecuencias.get(clave)!=frecuenciaEquiprobable) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public double calculaRendimiento(double entropia ,int largo) {
@@ -250,7 +262,7 @@ public class SegundaParte {
     public double calculaRedundancia(double rendimiento){
         return 1-rendimiento;
     }
-    
+
     public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
         String reconstruccion="";
         for (String cadena : cadenas) {
