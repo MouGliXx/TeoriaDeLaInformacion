@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="20ff8067-aa67-4e73-9164-d9c63457720b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/out/production/TP1/modelo/SegundaParte.class" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/out/production/TP1/modelo/SegundaParte.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TP1/src/modelo/SegundaParte.java" beforeDir="false" afterPath="$PROJECT_DIR$/TP1/src/modelo/SegundaParte.java" afterDir="false" />
-    </list>
+    <list default="true" id="20ff8067-aa67-4e73-9164-d9c63457720b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

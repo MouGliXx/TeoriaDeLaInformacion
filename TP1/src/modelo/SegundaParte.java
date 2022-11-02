@@ -26,7 +26,7 @@ public class SegundaParte {
     private double redundancia3C, redundancia5C, redundancia7C;
     private Map<String,String> arbolHuffman3C,arbolHuffman5C,arbolHuffman7C;
     private String reconstruccion3C,reconstruccion5C,reconstruccion7C;
-    private int cadenasPosibles3C,cadenasPosibles5C,cadenasPosibles7C;
+    private int longitudCadena3C,longitudCadena5C,longitudCadena7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -65,12 +65,12 @@ public class SegundaParte {
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
-        cadenasPosibles3C = (int) Math.pow(3,3);
-        cadenasPosibles5C = (int) Math.pow(3,5);
-        cadenasPosibles7C = (int) Math.pow(3,7);
-        esCompacto3C = esCompacto(cadenasPosibles3C, frecuencias3C);
-        esCompacto5C = esCompacto(cadenasPosibles5C, frecuencias5C);
-        esCompacto7C = esCompacto(cadenasPosibles7C, frecuencias7C);
+        longitudCadena3C = 3;
+        longitudCadena5C = 5;
+        longitudCadena7C = 7;
+        esCompacto3C = esCompacto(longitudCadena3C, frecuencias3C);
+        esCompacto5C = esCompacto(longitudCadena5C, frecuencias5C);
+        esCompacto7C = esCompacto(longitudCadena7C, frecuencias7C);
         rendimiento3C = calculaRendimiento(entropia3C,3);
         rendimiento5C = calculaRendimiento(entropia5C,5);
         rendimiento7C = calculaRendimiento(entropia7C,7);
@@ -242,15 +242,23 @@ public class SegundaParte {
         return longitudMedia;
     }
 
-    public boolean esCompacto(int cadenasPosibles,HashMap<String, Integer> frecuencias) {
-        System.out.println("Frecuencias: "+frecuencias);
-        double frecuenciaEquiprobable=(double) 1 / cadenasPosibles;
-        System.out.println(frecuencias.size());
-        for (String clave : frecuencias.keySet()) {
-            if (frecuencias.get(clave)!=frecuenciaEquiprobable) {
-                return false;
+    private static Double log(double num, int base) {
+        return (Math.log10(num) / Math.log10(base));
+    }
+
+    public boolean esCompacto(int longitudCadena,HashMap<String, Integer> frecuencias) {
+        if(Math.pow(3,longitudCadena) == frecuencias.size()){
+            int totalCadenas=10000 / longitudCadena;
+            double probabilidad;
+            System.out.println(frecuencias);
+            for (Map.Entry<String, Integer> entry : frecuencias.entrySet()) {
+                probabilidad=(double) entry.getValue()/totalCadenas;
+                if(entry.getKey().length()!=Math.ceil(log((1/probabilidad),3)))
+                    return false;
             }
         }
+        else
+            return false;
         return true;
     }
 
