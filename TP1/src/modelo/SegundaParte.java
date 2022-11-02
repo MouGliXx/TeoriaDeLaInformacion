@@ -247,17 +247,13 @@ public class SegundaParte {
     }
 
     public boolean esCompacto(int longitudCadena,HashMap<String, Integer> frecuencias) {
-        if(Math.pow(3,longitudCadena) == frecuencias.size()){
-            int totalCadenas=10000 / longitudCadena;
-            double probabilidad;
-            for (Map.Entry<String, Integer> entry : frecuencias.entrySet()) {
-                probabilidad=(double) entry.getValue()/totalCadenas;
-                if(entry.getKey().length()!=Math.ceil(log((1/probabilidad),3)))
-                    return false;
-            }
+        int totalCadenas=10000 / longitudCadena;
+        double probabilidad;
+        for (Map.Entry<String, Integer> entry : frecuencias.entrySet()) {
+            probabilidad=(double) entry.getValue()/totalCadenas;
+            if(entry.getKey().length()!=Math.ceil(log((1/probabilidad),3)))
+                return false;
         }
-        else
-            return false;
         return true;
     }
 
