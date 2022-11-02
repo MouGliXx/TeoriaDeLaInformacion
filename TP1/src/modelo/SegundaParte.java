@@ -250,7 +250,6 @@ public class SegundaParte {
         if(Math.pow(3,longitudCadena) == frecuencias.size()){
             int totalCadenas=10000 / longitudCadena;
             double probabilidad;
-            System.out.println(frecuencias);
             for (Map.Entry<String, Integer> entry : frecuencias.entrySet()) {
                 probabilidad=(double) entry.getValue()/totalCadenas;
                 if(entry.getKey().length()!=Math.ceil(log((1/probabilidad),3)))
