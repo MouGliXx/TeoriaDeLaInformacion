@@ -1,6 +1,7 @@
 package modelo;
 
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
@@ -26,7 +27,6 @@ public class SegundaParte {
     private double redundancia3C, redundancia5C, redundancia7C;
     private Map<String,String> arbolHuffman3C,arbolHuffman5C,arbolHuffman7C;
     private String reconstruccion3C,reconstruccion5C,reconstruccion7C;
-    private int cadenasPosibles3C,cadenasPosibles5C,cadenasPosibles7C;
 
     public SegundaParte(String datos) {
         sistemaOperativo = System.getProperty("os.name");
@@ -65,12 +65,9 @@ public class SegundaParte {
         longitudmedia3C = longitudMedia(frecuencias3C,datos3C.size(),codigo3C);
         longitudmedia5C = longitudMedia(frecuencias5C,datos5C.size(),codigo5C);
         longitudmedia7C = longitudMedia(frecuencias7C,datos7C.size(),codigo7C);
-        cadenasPosibles3C = (int) Math.pow(3,3);
-        cadenasPosibles5C = (int) Math.pow(3,5);
-        cadenasPosibles7C = (int) Math.pow(3,7);
-        esCompacto3C = esCompacto(cadenasPosibles3C, frecuencias3C);
-        esCompacto5C = esCompacto(cadenasPosibles5C, frecuencias5C);
-        esCompacto7C = esCompacto(cadenasPosibles7C, frecuencias7C);
+        esCompacto3C = esCompacto(entropia3C, longitudmedia3C);
+        esCompacto5C = esCompacto(entropia5C, longitudmedia5C);
+        esCompacto7C = esCompacto(entropia7C, longitudmedia7C);
         rendimiento3C = calculaRendimiento(entropia3C,3);
         rendimiento5C = calculaRendimiento(entropia5C,5);
         rendimiento7C = calculaRendimiento(entropia7C,7);
@@ -146,12 +143,11 @@ public class SegundaParte {
 
     public HashMap<String, Double> calculaInformacion(HashMap<String, Integer> frecuencias, int total) {
         HashMap<String, Double> informacion = new HashMap<>();
-
-        frecuencias.forEach((palabra, fr) -> {
-            double probabilidad = (double) fr / total;
-            informacion.put(palabra, logOrden(1 / probabilidad));
-        });
-
+        for (Map.Entry<String,Integer> entry : frecuencias.entrySet()) {
+            double probabilidad = (double) entry.getValue() / total;
+            informacion.put(entry.getKey(), logOrden(1 / probabilidad));
+            
+        }
         return informacion;
     }
 
@@ -242,16 +238,8 @@ public class SegundaParte {
         return longitudMedia;
     }
 
-    public boolean esCompacto(int cadenasPosibles,HashMap<String, Integer> frecuencias) {
-        System.out.println("Frecuencias: "+frecuencias);
-        double frecuenciaEquiprobable=(double) 1 / cadenasPosibles;
-        System.out.println(frecuencias.size());
-        for (String clave : frecuencias.keySet()) {
-            if (frecuencias.get(clave)!=frecuenciaEquiprobable) {
-                return false;
-            }
-        }
-        return true;
+    public boolean esCompacto(double entropia, double longitudMedia) {
+        return entropia <= longitudMedia;
     }
 
     public double calculaRendimiento(double entropia ,int largo) {
@@ -261,7 +249,7 @@ public class SegundaParte {
     public double calculaRedundancia(double rendimiento){
         return 1-rendimiento;
     }
-
+    
     public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
         String reconstruccion="";
         for (String cadena : cadenas) {
@@ -275,10 +263,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoA.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoA.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoA.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -286,32 +271,29 @@ public class SegundaParte {
         bfwriter.write("a) Calcular la cantidad de información y entropía.\n");
 
         bfwriter.write("\nInformacion Codigo3C:\n");
-        informacion3C.forEach((key, inf) -> {
+        for (Map.Entry<String,Double> entry : informacion3C.entrySet()) {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
+                bfwriter.write("\tI(" + entry.getKey() + ") = " + entry.getValue() + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
+        }
         bfwriter.write("\nInformacion Codigo5C:\n");
-        informacion5C.forEach((key, inf) -> {
+        for (Map.Entry<String,Double> entry : informacion5C.entrySet()) {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
+                bfwriter.write("\tI(" + entry.getKey() + ") = " + entry.getValue() + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
+        }
         bfwriter.write("\nInformacion Codigo7C:\n");
-        informacion7C.forEach((key, inf) -> {
+        for (Map.Entry<String,Double> entry : informacion7C.entrySet()) {
             try {
-                bfwriter.write("\tI(" + key + ") = " + inf + " unidades de orden " + orden + "\n");
+                bfwriter.write("\tI(" + entry.getKey() + ") = " + entry.getValue() + " unidades de orden " + orden + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
-
+        }
         bfwriter.write("\nEntropia:\n");
         bfwriter.write("\tH(Codigo3C) = " + entropia3C + " unidades de orden " + orden + "\n");
         bfwriter.write("\tH(Codigo5C) = " + entropia5C + " unidades de orden " + orden + "\n");
@@ -326,10 +308,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoB.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoB.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoB.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -411,10 +390,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoC.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoC.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoC.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -455,10 +431,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoD.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoD.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoD.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -485,11 +458,8 @@ public class SegundaParte {
     public void generarArchivoIncisoE1() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
-
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE1.txt";
+    
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -508,10 +478,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.dat";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE1.dat";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE1.dat";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -549,14 +516,13 @@ public class SegundaParte {
         fileWriter.close();
     }
 
+
+
     public void generarArchivoIncisoE2() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE2.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -571,14 +537,20 @@ public class SegundaParte {
         fileWriter.close();
     }
 
+    public static String toBinary(byte n, int len)
+    {
+        String binary = "";
+        for (long i = (1L << len - 1); i > 0; i = i / 2) {
+            binary += (n & i) != 0 ? "1" : "0";
+        }
+        return binary;
+    }
+
     public void generarArchivoIncisoE2binario() throws IOException {
         String outputFileName;
         FileWriter fileWriter;
-
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.dat";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE2.dat";
+        
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE2.dat";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -620,10 +592,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.txt";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE3.txt";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.txt";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -642,10 +611,7 @@ public class SegundaParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.dat";
-        else
-            outputFileName = "../Archivos Generados/Segunda Parte/IncisoE3.dat";
+        outputFileName = "Archivos Generados/Segunda Parte/IncisoE3.dat";
 
         fileWriter = new FileWriter(outputFileName, false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
