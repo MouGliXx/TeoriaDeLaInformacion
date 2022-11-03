@@ -1,4 +1,0 @@
-e) Codificar los símbolos de los códigos anteriores según Huffman o Shanon-Fano (a elección)
-y reconstruir el archivo (en tres archivos, uno por codificación).
-	Arbol Huffman: 
-{BBA=0010, ABA=11110, ABB=10000, BBC=10100, ABC=10111, CBB=11101, BBB=01110, CBA=1001, CBC=11111, ACA=011111, BCB=0011, ACB=11010, CCA=110111, AAA=10001, BCA=101100, ACC=11000, CCC=0000, BAA=0001, CAA=011110, AAB=11001, CCB=0101, BAB=0110, AAC=10101, BCC=11100, BAC=0100, CAC=101101, CAB=110110}
