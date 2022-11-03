@@ -1,0 +1,17 @@
+c) Establecer en cada caso la Inecuación de Kraft, MacMillan, Longitud Media del código y si
+cumplen con la condición de ser compactos. Obtener conclusiones.
+
+Codigo3C:
+	Inecuacion Kraft-MacMillan = 1.0 (<=1 cumple condicion)
+	Longitud media = 3.000000000000001
+	El codigo no es compacto.
+
+Codigo5C:
+	Inecuacion Kraft-MacMillan = 0.9876543209876544 (<=1 cumple condicion)
+	Longitud media = 5.0
+	El codigo no es compacto.
+
+Codigo7C:
+	Inecuacion Kraft-MacMillan = 0.42935528120713307 (<=1 cumple condicion)
+	Longitud media = 6.999999999999978
+	El codigo no es compacto.
