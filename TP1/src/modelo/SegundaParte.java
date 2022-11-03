@@ -251,7 +251,7 @@ public class SegundaParte {
         double probabilidad;
         for (Map.Entry<String, Integer> entry : frecuencias.entrySet()) {
             probabilidad=(double) entry.getValue()/totalCadenas;
-            if(entry.getKey().length()!=Math.ceil(log((1/probabilidad),3)))
+            if(entry.getKey().length()>=Math.ceil(log((1/probabilidad),3)))
                 return false;
         }
         return true;
