@@ -2,8 +2,8 @@ package modelo;
 
 public class SegundaParte {
 
-    private static int i=3;
-    private static int j=4;
+    private static int j;
+    private static int i;
     private double[][] matriz = new double[i][j];
     private double[] probPriori = new double[i];
     private double[][] probPosteriori;
@@ -14,8 +14,9 @@ public class SegundaParte {
     private double equivocacion;
     private double informacionMutua;
 
-
-    public SegundaParte(double[][] matriz, double[] vector){
+    public SegundaParte(int nroFilas, int nroColumnas,double[][] matriz, double[] vector){
+        SegundaParte.setI(nroFilas);
+        SegundaParte.setJ(nroColumnas);
         this.matriz = matriz;
         this.probPriori = vector;
         this.probSalida = calcProbSalida();
@@ -27,6 +28,13 @@ public class SegundaParte {
         this.informacionMutua = calcInformacionMutua();
     }
 
+    public static void setI(int nroFilas){
+        SegundaParte.i = nroFilas;
+    }
+
+    public static void setJ(int nroColumnas){
+        SegundaParte.j = nroColumnas;
+    }
     public double getEntropiaPriori (){
         return entropiaPriori;
     }
@@ -136,5 +144,24 @@ public class SegundaParte {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public void mostrarResultados(){
+        System.out.println("PROBABILIDAD DE SALIDA");
+        mostrarVectorSalida();
+        System.out.println();
+        System.out.println("PROBABILIDAD A POSTERIORI");
+        mostrarProbabilidadPosteriori();
+        System.out.println("PROBABILIDAD DEL SUCESO SIMULTANEO");
+        mostrarProbabilidadSucesoSimultaneo();
+        System.out.println();
+        System.out.println("H(A) = "+getEntropiaPriori());
+        System.out.println();
+        System.out.println("ENTROPIA A POSTERIORI ");
+        mostrarVectorEntropiaPosteriori();
+        System.out.println();
+        System.out.println("H(A/B) = "+getEquivocacion());
+        System.out.println();
+        System.out.println("INFORMACION MUTUA "+getInformacionMutua());
     }
 }
