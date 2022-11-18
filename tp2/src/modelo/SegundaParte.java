@@ -4,8 +4,8 @@ public class SegundaParte {
 
     private static int j;
     private static int i;
-    private double[][] matriz = new double[i][j];
-    private double[] probPriori = new double[i];
+    private double[][] matriz;
+    private double[] probPriori;
     private double[][] probPosteriori;
     private double[] probSalida;
     private double[][] probSucesoSimultaneo;
@@ -35,6 +35,7 @@ public class SegundaParte {
     public static void setJ(int nroColumnas){
         SegundaParte.j = nroColumnas;
     }
+
     public double getEntropiaPriori (){
         return entropiaPriori;
     }
@@ -42,9 +43,11 @@ public class SegundaParte {
     public double getInformacionMutua (){
         return informacionMutua;
     }
+
     public double getEquivocacion (){
         return equivocacion;
     }
+
     public double[] getEntropiaPosteriori (){
         return entropiaPosteriori;
     }
@@ -93,7 +96,7 @@ public class SegundaParte {
             suma = 0.;
             for (int f = 0; f < i; f++) {
                 if (probPosteriori[f][c]!=0.)
-                    suma += probPosteriori[f][c] * (Math.log(1 / probPosteriori[f][c]) / Math.log((double)j));
+                    suma += probPosteriori[f][c] * (Math.log(1 / probPosteriori[f][c]) / Math.log(j));
             }
             entropia[c]= suma;
         }
@@ -119,13 +122,13 @@ public class SegundaParte {
     }
 
     public void mostrarVectorEntropiaPosteriori (){
-        for (int c = 0 ; c < entropiaPosteriori.length ; c++)
-            System.out.print(entropiaPosteriori[c]+" ");
+        for (double v : entropiaPosteriori)
+            System.out.print(v + " ");
         System.out.println();
     }
     public void mostrarVectorSalida (){
-        for (int c = 0 ; c < probSalida.length ; c++)
-                System.out.print(probSalida[c]+" ");
+        for (double v : probSalida)
+            System.out.print(v + " ");
         System.out.println();
     }
 
