@@ -9,14 +9,13 @@ import java.io.IOException;
 
 public class App {
     public static void main(String[] args) {
-        String sistemaOperativo = System.getProperty("os.name");
-
+    
         //LECTURA ARCHIVO
         BufferedReader archivo;
         String inputFileName, datos = null;
 
-        inputFileName = "DatosTP1.txt";
-
+        inputFileName = "tp1/DatosTP1.txt";
+        
         File url = new File(inputFileName);
 
         try {

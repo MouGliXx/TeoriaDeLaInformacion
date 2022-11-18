@@ -190,16 +190,16 @@ public class PrimeraParte {
 
     public double calcularEntropia(double[][]matrizProbabilidades, double[]vectorEstacionario){
         int i,j;
-        double entropia = 0., suma, log2;
+        double entropia = 0., suma, log3;
 
         for(i = 0; i < n; i++){
             suma = 0.;
             for (j = 0; j < n; j++){
                 if (matrizProbabilidades[j][i] != 0)
-                    log2 = Math.log(1/matrizProbabilidades[j][i])/Math.log(2);
+                    log3 = Math.log(1/matrizProbabilidades[j][i])/Math.log(3);
                 else
-                    log2 = 0.;
-                suma += matrizProbabilidades[j][i]*log2;
+                    log3 = 0.;
+                suma += matrizProbabilidades[j][i]*log3;
             }
             entropia += (vectorEstacionario[i]*suma);
         }
@@ -213,10 +213,7 @@ public class PrimeraParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/IncisoA.txt";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/IncisoA.txt";
+        outputFileName = "Archivos Generados/Primera Parte/IncisoA.txt";
 
         fileWriter = new FileWriter(outputFileName,false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
@@ -250,10 +247,7 @@ public class PrimeraParte {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/IncisoC.txt";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/IncisoC.txt";
+        outputFileName = "Archivos Generados/Primera Parte/IncisoC.txt";
 
         fileWriter = new FileWriter(outputFileName,false);
         BufferedWriter bfwriter = new BufferedWriter(fileWriter);
