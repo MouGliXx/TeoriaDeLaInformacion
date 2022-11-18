@@ -13,11 +13,13 @@ public class PrimeraParte {
     public PrimeraParte(BufferedReader archivo) {
         this.sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
-//        simbolos = extraeSimbolos(diccionario);
-//        orden = simbolos.size();
+        simbolos = extraeSimbolos(diccionario);
+        orden = simbolos.size();
 
         System.out.println(diccionario.size());
         System.out.println(diccionario);
+        System.out.println(simbolos);
+        System.out.println(orden);
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -38,12 +40,14 @@ public class PrimeraParte {
         return datos;
     }
 
-    public ArrayList<Character> extraeSimbolos(String datos) {
+    public ArrayList<Character> extraeSimbolos(ArrayList<String> diccionario) {
         ArrayList<Character> simbolos = new ArrayList<>();
 
-        for (int i = 0; i < datos.length(); i++) {
-            if (!simbolos.contains(datos.charAt(i))) {
-                simbolos.add(datos.charAt(i));
+        for (String palabra : diccionario) {
+            for (int i = 0; i < palabra.length(); i++) {
+                if (!simbolos.contains(palabra.charAt(i))) {
+                    simbolos.add(palabra.charAt(i));
+                }
             }
         }
 
