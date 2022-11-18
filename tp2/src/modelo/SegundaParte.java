@@ -1,7 +1,6 @@
 package modelo;
 
 public class SegundaParte {
-
     private static int j;
     private static int i;
     private double[][] matriz;
