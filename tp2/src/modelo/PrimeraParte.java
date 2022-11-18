@@ -3,21 +3,25 @@ package modelo;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PrimeraParte {
     private String sistemaOperativo;
-    private ArrayList<String> diccionario;
+    private ArrayList<String> diccionario, codigo;
     private ArrayList<Character> simbolos;
+    private HashMap<String, Integer> frecuencias3C;
     private int orden;
 
     public PrimeraParte(BufferedReader archivo) {
-        this.sistemaOperativo = System.getProperty("os.name");
+        sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
         simbolos = extraeSimbolos(diccionario);
         orden = simbolos.size();
+        codigo = identificaPalabrasCodigo(diccionario);
+        frecuencias3C = calculaFrecuencias(diccionario);
 
-        System.out.println(diccionario.size());
-        System.out.println(diccionario);
+        System.out.println(frecuencias3C.size());
+        System.out.println(frecuencias3C);
         System.out.println(simbolos);
         System.out.println(orden);
     }
@@ -52,5 +56,27 @@ public class PrimeraParte {
         }
 
         return simbolos;
+    }
+
+    public ArrayList<String> identificaPalabrasCodigo(ArrayList<String> codigo) {
+        ArrayList<String> alfabeto = new ArrayList<>();
+
+        for (String palabra: codigo) {
+            if (!alfabeto.contains(palabra))
+                alfabeto.add(palabra);
+        }
+
+        return alfabeto;
+    }
+
+    public HashMap<String, Integer> calculaFrecuencias(ArrayList<String> datos) {
+        HashMap<String, Integer> frecuencias = new HashMap<>();
+
+        for (String i : datos) {
+            Integer j = frecuencias.get(i);
+            frecuencias.put(i, (j == null) ? 1 : j + 1);
+        }
+
+        return frecuencias;
     }
 }
