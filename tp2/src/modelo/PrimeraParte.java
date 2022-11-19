@@ -10,7 +10,6 @@ public class PrimeraParte {
     private ArrayList<String> diccionario, codigo;
     private ArrayList<Character> simbolos;
     private HashMap<String, Integer> frecuencias;
-    private HashMap<String, String> codificacionShannonFano;
     private HashMap<String, Double> informacion;
     private double entropia;
     private int orden;
@@ -20,14 +19,15 @@ public class PrimeraParte {
         diccionario = generaDiccionario(archivo);
         simbolos = extraeSimbolos(diccionario);
         orden = simbolos.size();
-        codigo = identificaPalabrasCodigo(diccionario);
         frecuencias = calculaFrecuencias(diccionario);
+        codigo = identificaPalabrasCodigo(frecuencias);
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
 
-        System.out.println(orden);
-        System.out.println(entropia);
+//        System.out.println(orden);
+//        System.out.println(entropia);
 
+        //PRUEBAS
         HashMap<String, Integer> auxFr = new HashMap<>();
         ArrayList<String> auxCod = new ArrayList<>();
 
@@ -88,12 +88,11 @@ public class PrimeraParte {
         return simbolos;
     }
 
-    public ArrayList<String> identificaPalabrasCodigo(ArrayList<String> codigo) {
+    public ArrayList<String> identificaPalabrasCodigo(HashMap<String, Integer> frecuencias) {
         ArrayList<String> alfabeto = new ArrayList<>();
 
-        for (String palabra: codigo) {
-            if (!alfabeto.contains(palabra))
-                alfabeto.add(palabra);
+        for (String palabra: frecuencias.keySet()) {
+            alfabeto.add(palabra);
         }
 
         return alfabeto;

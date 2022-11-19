@@ -15,7 +15,9 @@ public class ShannonFano {
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
 
-//        System.out.println(shannonFano);
+        for (String key : frecuencias.keySet())
+            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
+
         System.out.println(longitudMedia);
         System.out.println(rendimiento);
         System.out.println(redundancia);
@@ -114,8 +116,8 @@ public class ShannonFano {
 //            System.out.println("mitadSuperior" + mitadSuperior);
 //            System.out.println("mitadInferior" + mitadInferior);
 
-            encode(mitadSuperior, codificacion + '1');
-            encode(mitadInferior, codificacion + '0');
+            encode(mitadSuperior, codificacion + '0');
+            encode(mitadInferior, codificacion + '1');
         }
     }
 
