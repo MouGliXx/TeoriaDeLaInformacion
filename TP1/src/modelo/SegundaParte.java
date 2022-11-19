@@ -80,9 +80,9 @@ public class SegundaParte {
         arbolHuffman3C = construyeArbolHuffman(frecuencias3C);
         arbolHuffman5C = construyeArbolHuffman(frecuencias5C);
         arbolHuffman7C = construyeArbolHuffman(frecuencias7C);
-        reconstruccion3C=reconstruyeArbolOriginalCodificado(arbolHuffman3C,datos3C);
-        reconstruccion5C=reconstruyeArbolOriginalCodificado(arbolHuffman5C,datos5C);
-        reconstruccion7C=reconstruyeArbolOriginalCodificado(arbolHuffman7C,datos7C);
+        reconstruccion3C = reconstruyeArbolOriginalCodificado(arbolHuffman3C,datos3C);
+        reconstruccion5C = reconstruyeArbolOriginalCodificado(arbolHuffman5C,datos5C);
+        reconstruccion7C = reconstruyeArbolOriginalCodificado(arbolHuffman7C,datos7C);
     }
 
     public  ArrayList<Character> extraeSimbolos(String datos) {
@@ -268,7 +268,6 @@ public class SegundaParte {
     public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
         String reconstruccion="";
         for (String cadena : cadenas) {
-
             reconstruccion += arbolHuffman.get(cadena);
         }
         return reconstruccion;

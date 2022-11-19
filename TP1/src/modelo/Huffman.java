@@ -27,12 +27,11 @@ class comparadorNodo implements  Comparator<Nodo>{
 }
 
 public class Huffman {
-    public static boolean esHoja(Nodo root){
+    public static boolean esHoja(Nodo root) {
         return root.izq==null && root.der==null;
     }
 
-    public static void encode(Nodo root, String str, Map<String, String> huffmanCode)
-    {
+    public static void encode(Nodo root, String str, Map<String, String> huffmanCode) {
         if (root == null) {
             return;
         }
@@ -46,18 +45,15 @@ public class Huffman {
         encode(root.der, str + '1', huffmanCode);
     }
 
-    public static Map<String,String> construyeArbolHuffman(Map<String,Integer> datos)
-    {
+    public static Map<String,String> construyeArbolHuffman(Map<String,Integer> datos) {
         PriorityQueue<Nodo> colaDatos = new PriorityQueue<>(new comparadorNodo());
 
         Iterator<String> it=datos.keySet().iterator();
-
 
         while(it.hasNext()){
             String key=it.next();
             colaDatos.add(new Nodo(key, datos.get(key)));
         }
-
 
         while(colaDatos.size()>1){
             Nodo izq=colaDatos.poll();
@@ -71,14 +67,6 @@ public class Huffman {
         Nodo raiz=colaDatos.peek();
         encode(raiz,"",huffman);
 
-
         return huffman;
-
     }
-
-
-
-
 }
-
-

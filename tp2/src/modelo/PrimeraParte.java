@@ -2,14 +2,15 @@ package modelo;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class PrimeraParte {
     private String sistemaOperativo;
     private ArrayList<String> diccionario, codigo;
     private ArrayList<Character> simbolos;
-    private HashMap<String, Integer> frecuencias3C;
+    private HashMap<String, Integer> frecuencias;
+    private HashMap<String, String> codificacionShannonFano;
     private int orden;
 
     public PrimeraParte(BufferedReader archivo) {
@@ -18,12 +19,36 @@ public class PrimeraParte {
         simbolos = extraeSimbolos(diccionario);
         orden = simbolos.size();
         codigo = identificaPalabrasCodigo(diccionario);
-        frecuencias3C = calculaFrecuencias(diccionario);
+        frecuencias = calculaFrecuencias(diccionario);
 
-        System.out.println(frecuencias3C.size());
-        System.out.println(frecuencias3C);
-        System.out.println(simbolos);
-        System.out.println(orden);
+        HashMap<String, Integer> auxFr = new HashMap<>();
+        ArrayList<String> auxCod = new ArrayList<>();
+
+        auxCod.add("a");
+        auxCod.add("b");
+        auxCod.add("c");
+        auxCod.add("d");
+        auxCod.add("e");
+        auxCod.add("f");
+        auxCod.add("g");
+        auxCod.add("h");
+
+        auxFr.put("a",40);
+        auxFr.put("b",20);
+        auxFr.put("c",15);
+        auxFr.put("d",10);
+        auxFr.put("e",6);
+        auxFr.put("f",4);
+        auxFr.put("g",3);
+        auxFr.put("h",2);
+
+//        ShannonFano shannonFano = new ShannonFano(frecuencias);
+//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(codigo);
+
+        ShannonFano shannonFano = new ShannonFano(auxFr);
+        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
+
+        System.out.println(codificacionShannonFano);
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -70,13 +95,17 @@ public class PrimeraParte {
     }
 
     public HashMap<String, Integer> calculaFrecuencias(ArrayList<String> datos) {
-        HashMap<String, Integer> frecuencias = new HashMap<>();
+        Map<String, Integer> frecuencias = new HashMap<>();
 
         for (String i : datos) {
             Integer j = frecuencias.get(i);
             frecuencias.put(i, (j == null) ? 1 : j + 1);
         }
 
-        return frecuencias;
+        //Ordeno de forma descendente
+        return frecuencias.entrySet()
+                .stream()
+                .sorted((Map.Entry.<String, Integer>comparingByValue().reversed()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 }
