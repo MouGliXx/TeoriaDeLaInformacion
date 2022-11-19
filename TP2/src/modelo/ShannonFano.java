@@ -5,9 +5,36 @@ import java.util.HashMap;
 
 public class ShannonFano {
     private HashMap<String, Integer> frecuencias;
+    private HashMap<String, String> shannonFano = new HashMap<>();
+    private double longitudMedia, rendimiento, redundancia;
 
-    public ShannonFano(HashMap<String, Integer> frecuencias) {
+    public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia) {
         this.frecuencias = frecuencias;
+        encode(codigo, "");
+        longitudMedia = longitudMedia(frecuencias, frecuencias.size(), shannonFano);
+        rendimiento = calculaRendimiento(entropia, longitudMedia);
+        redundancia = calculaRedundancia(rendimiento);
+
+//        System.out.println(shannonFano);
+        System.out.println(longitudMedia);
+        System.out.println(rendimiento);
+        System.out.println(redundancia);
+    }
+
+    public HashMap<String, String> getShannonFano() {
+        return shannonFano;
+    }
+
+    public double getLongitudMedia() {
+        return longitudMedia;
+    }
+
+    public double getRendimiento() {
+        return rendimiento;
+    }
+
+    public double getRedundancia() {
+        return redundancia;
     }
 
     public int sumaTotalFrencuencias(ArrayList<String> codigo) {
@@ -71,11 +98,11 @@ public class ShannonFano {
         return mitadInferior;
     }
 
-    public void encode(ArrayList<String> codigo, String codificacion, HashMap<String, String> ShannonFano) {
+    public void encode(ArrayList<String> codigo, String codificacion) {
         int k;
 
         if (codigo.size() == 1) { //Es hoja
-            ShannonFano.put(codigo.get(0), codificacion.length() > 0 ? codificacion : "1");
+            this.shannonFano.put(codigo.get(0), codificacion.length() > 0 ? codificacion : "1");
         } else {
             k = calculaK(codigo);
 
@@ -87,16 +114,28 @@ public class ShannonFano {
 //            System.out.println("mitadSuperior" + mitadSuperior);
 //            System.out.println("mitadInferior" + mitadInferior);
 
-            encode(mitadSuperior, codificacion + '1', ShannonFano);
-            encode(mitadInferior, codificacion + '0', ShannonFano);
+            encode(mitadSuperior, codificacion + '1');
+            encode(mitadInferior, codificacion + '0');
         }
     }
 
-    public HashMap<String, String> construyeArbolShannonFano(ArrayList<String> codigo) {
-        HashMap<String, String> shannonFano = new HashMap<>();
+    public double longitudMedia(HashMap<String, Integer> frecuencias, int total, HashMap<String, String> shannonFano){
+        double probabilidad, longitudCadena, longitudMedia = 0;
 
-        encode(codigo, "", shannonFano);
+        for (String key : frecuencias.keySet()) {
+            probabilidad = (double) frecuencias.get(key) / total;
+            longitudCadena = shannonFano.get(key).length();
+            longitudMedia += probabilidad * longitudCadena;
+        }
 
-        return shannonFano;
+        return longitudMedia;
+    }
+
+    public double calculaRendimiento(double entropia , double L) {
+        return entropia / L;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        return 1 - rendimiento;
     }
 }

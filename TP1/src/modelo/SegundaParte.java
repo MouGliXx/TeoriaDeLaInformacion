@@ -242,10 +242,6 @@ public class SegundaParte {
         return longitudMedia;
     }
 
-    private static Double log(double num, int base) {
-        return (Math.log10(num) / Math.log10(base));
-    }
-
     public boolean esCompacto(int longitudCadena,HashMap<String, Integer> frecuencias) {
         int totalCadenas=10000 / longitudCadena;
         double probabilidad;
@@ -678,7 +674,6 @@ public class SegundaParte {
             }
             bfwriter.write(ochoBits);
         }
-
 
         System.out.println("\tArchivo 'IncisoE3.dat' modificado satisfactoriamente...");
         bfwriter.close();

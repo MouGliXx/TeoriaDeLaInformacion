@@ -28,7 +28,6 @@ public class App {
 
         //PRIMERA PARTE
         PrimeraParte primeraParte = new PrimeraParte(archivo);
-        System.out.println("Primera parte:");
 
 //        //P(A) Y MATRIZ DE PRUEBA EJERCICIO DE LA GUIA
 //        double[][] m1 = new double[3][4];

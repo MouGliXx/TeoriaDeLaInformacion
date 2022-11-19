@@ -11,6 +11,8 @@ public class PrimeraParte {
     private ArrayList<Character> simbolos;
     private HashMap<String, Integer> frecuencias;
     private HashMap<String, String> codificacionShannonFano;
+    private HashMap<String, Double> informacion;
+    private double entropia;
     private int orden;
 
     public PrimeraParte(BufferedReader archivo) {
@@ -20,6 +22,11 @@ public class PrimeraParte {
         orden = simbolos.size();
         codigo = identificaPalabrasCodigo(diccionario);
         frecuencias = calculaFrecuencias(diccionario);
+        informacion = calculaInformacion(frecuencias, diccionario.size());
+        entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
+
+        System.out.println(orden);
+        System.out.println(entropia);
 
         HashMap<String, Integer> auxFr = new HashMap<>();
         ArrayList<String> auxCod = new ArrayList<>();
@@ -42,13 +49,11 @@ public class PrimeraParte {
         auxFr.put("g",3);
         auxFr.put("h",2);
 
-//        ShannonFano shannonFano = new ShannonFano(frecuencias);
+        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 //        codificacionShannonFano = shannonFano.construyeArbolShannonFano(codigo);
 
-        ShannonFano shannonFano = new ShannonFano(auxFr);
-        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
-
-        System.out.println(codificacionShannonFano);
+//        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
+//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -107,5 +112,31 @@ public class PrimeraParte {
                 .stream()
                 .sorted((Map.Entry.<String, Integer>comparingByValue().reversed()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    public double logOrden(double x) {
+        return Math.log(x) / Math.log(orden);
+    }
+
+    public HashMap<String, Double> calculaInformacion(HashMap<String, Integer> frecuencias, int total) {
+        HashMap<String, Double> informacion = new HashMap<>();
+
+        frecuencias.forEach((palabra, fr) -> {
+            double probabilidad = (double) fr / total;
+            informacion.put(palabra, logOrden(1 / probabilidad));
+        });
+
+        return informacion;
+    }
+
+    public double calculaEntropia(ArrayList<String> codigo, HashMap<String, Double> informacion, HashMap<String, Integer> frecuencias, int total) {
+        double resultado = 0;
+
+        for (String key : codigo) {
+            double probabilidad = (double) frecuencias.get(key) / total;
+            resultado += informacion.get(key) * probabilidad;
+        }
+
+        return resultado;
     }
 }
