@@ -30,7 +30,7 @@ public class PrimeraParte {
         // { HUFFMAN }
 
 
-        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
+//        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 
         generaArchivoShannonFano();
     }

@@ -12,6 +12,11 @@ public class SegundaParte {
     private double[] entropiaPosteriori;
     private double equivocacion;
     private double informacionMutua;
+    private double entropiaAfin;
+    private double entropiaSalida;
+    private double informacionMutuaSimetrica;
+    private double ruido;
+    private double perdida;
 
     public SegundaParte(int nroFilas, int nroColumnas,double[][] matriz, double[] vector){
         SegundaParte.setI(nroFilas);
@@ -25,6 +30,11 @@ public class SegundaParte {
         this.entropiaPosteriori = calcEntropiaPosteriori();
         this.equivocacion = calcularEquivocacion();
         this.informacionMutua = calcInformacionMutua();
+        this.entropiaAfin = calcEntropiaAfin();
+        this.entropiaSalida = calcEntropiaSalida();
+        this.informacionMutuaSimetrica = calcInformacionMutuaSimetrica();
+        this.ruido = calcRuido();
+        this.perdida = calcPerdida();
     }
 
     public static void setI(int nroFilas){
@@ -47,8 +57,26 @@ public class SegundaParte {
         return equivocacion;
     }
 
+    public double getEntropiaAfin (){
+        return entropiaAfin;
+    }
+
+    public double getEntropiaSalida (){
+        return entropiaSalida;
+    }
+
+    public double getPerdida(){
+        return perdida;
+    }
+    public double getRuido(){
+        return ruido;
+    }
     public double[] getEntropiaPosteriori (){
         return entropiaPosteriori;
+    }
+
+    public double getInformacionMutuaSimetrica (){
+        return informacionMutuaSimetrica;
     }
 
     private double[] calcProbSalida(){
@@ -81,6 +109,12 @@ public class SegundaParte {
         return v;
     }
 
+    private double calcEntropiaSalida(){
+        double entropia = 0;
+        for (int f = 0 ; f < j ; f++)
+            entropia += probSalida[f]*(Math.log(1/probSalida[f])/Math.log(2.));
+        return entropia;
+    }
     private double calcEntropiaPriori(){
         double entropia = 0;
         for (int f = 0 ; f < i ; f++)
@@ -95,7 +129,7 @@ public class SegundaParte {
             suma = 0.;
             for (int f = 0; f < i; f++) {
                 if (probPosteriori[f][c]!=0.)
-                    suma += probPosteriori[f][c] * (Math.log(1 / probPosteriori[f][c]) / Math.log(j));
+                    suma += probPosteriori[f][c] * (Math.log(1 / probPosteriori[f][c]) / Math.log(2.));
             }
             entropia[c]= suma;
         }
@@ -118,6 +152,26 @@ public class SegundaParte {
                 if (probPosteriori[f][c]!=0.)
                     informacion += probSucesoSimultaneo[f][c] * (Math.log(probPosteriori[f][c]/probPriori[f] ) / Math.log(2.));
         return informacion;
+    }
+
+    private double calcPerdida(){
+        return this.entropiaAfin-this.entropiaPriori;
+    }
+
+    private double calcRuido(){
+        return this.entropiaAfin-this.entropiaSalida;
+    }
+    private double calcInformacionMutuaSimetrica(){
+        return this.entropiaPriori+this.entropiaSalida-this.entropiaAfin;
+    }
+
+    private double calcEntropiaAfin(){
+        double entroiaAfin = 0;
+        for (int f = 0; f < i; f++)
+            for (int c = 0 ; c < j ; c++)
+                if (probPosteriori[f][c]!=0.)
+                    entropiaAfin += probSucesoSimultaneo[f][c] * (Math.log(1./probSucesoSimultaneo[f][c] ) / Math.log(2.));
+        return entropiaAfin;
     }
 
     public void mostrarVectorEntropiaPosteriori (){
@@ -159,11 +213,22 @@ public class SegundaParte {
         System.out.println();
         System.out.println("H(A) = "+getEntropiaPriori());
         System.out.println();
+        System.out.println("ENTROPIA SALIDA "+getEntropiaSalida());
+        System.out.println();
         System.out.println("ENTROPIA A POSTERIORI ");
         mostrarVectorEntropiaPosteriori();
         System.out.println();
         System.out.println("H(A/B) = "+getEquivocacion());
         System.out.println();
         System.out.println("INFORMACION MUTUA "+getInformacionMutua());
+        System.out.println();
+        System.out.println("INFORMACION MUTUA SIMETRICA "+ getInformacionMutuaSimetrica());
+        System.out.println();
+        System.out.println("ENTROPIA AFIN "+getEntropiaAfin());
+        System.out.println();
+        System.out.println("PERDIDA "+getPerdida());
+        System.out.println();
+        System.out.println("RUIDO "+getRuido());
+        System.out.println();
     }
 }
