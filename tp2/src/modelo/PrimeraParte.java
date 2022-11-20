@@ -30,36 +30,19 @@ public class PrimeraParte {
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
 
-//        System.out.println(orden);
-//        System.out.println(entropia);
 
-        //PRUEBAS
-        HashMap<String, Integer> auxFr = new HashMap<>();
-        ArrayList<String> auxCod = new ArrayList<>();
+        // { HUFFMAN }
 
-        auxCod.add("a");
-        auxCod.add("b");
-        auxCod.add("c");
-        auxCod.add("d");
-        auxCod.add("e");
-        auxCod.add("f");
-        auxCod.add("g");
-        auxCod.add("h");
 
-        auxFr.put("a",40);
-        auxFr.put("b",20);
-        auxFr.put("c",15);
-        auxFr.put("d",10);
-        auxFr.put("e",6);
-        auxFr.put("f",4);
-        auxFr.put("g",3);
-        auxFr.put("h",2);
+//        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 //        codificacionShannonFano = shannonFano.construyeArbolShannonFano(codigo);
 
 //        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
 //        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
+
+        generaArchivoShannonFano();
 
         arbolHuffman=construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
@@ -175,7 +158,7 @@ public class PrimeraParte {
     }
     
 
-    public void generarArchivoIncisoHuffman() throws IOException {
+    public void generaArchivoShannonFano() {
         String outputFileName;
         FileWriter fileWriter;
 
@@ -191,6 +174,15 @@ public class PrimeraParte {
             bfwriter.write("\tTasa de compresion:"+ "\n");
             bfwriter.write("\tRendimiento: "+rendimientoHuffman+ "\n");
             bfwriter.write("\tRedundancia: "+redundanciaHuffman+ "\n");
+            outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
+
+        try {
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+            //...
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -199,5 +191,5 @@ public class PrimeraParte {
         bfwriter.close();
         fileWriter.close();
     }
-
+    }
 }

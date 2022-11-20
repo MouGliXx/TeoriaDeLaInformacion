@@ -10,7 +10,7 @@ public class ShannonFano {
 
     public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia) {
         this.frecuencias = frecuencias;
-        encode(codigo, "");
+        generaShannonFano(codigo, "");
         longitudMedia = longitudMedia(frecuencias, frecuencias.size(), shannonFano);
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
@@ -25,18 +25,6 @@ public class ShannonFano {
 
     public HashMap<String, String> getShannonFano() {
         return shannonFano;
-    }
-
-    public double getLongitudMedia() {
-        return longitudMedia;
-    }
-
-    public double getRendimiento() {
-        return rendimiento;
-    }
-
-    public double getRedundancia() {
-        return redundancia;
     }
 
     public int sumaTotalFrencuencias(ArrayList<String> codigo) {
@@ -100,24 +88,15 @@ public class ShannonFano {
         return mitadInferior;
     }
 
-    public void encode(ArrayList<String> codigo, String codificacion) {
+    public void generaShannonFano(ArrayList<String> codigo, String codificacion) {
         int k;
 
         if (codigo.size() == 1) { //Es hoja
             this.shannonFano.put(codigo.get(0), codificacion.length() > 0 ? codificacion : "1");
         } else {
             k = calculaK(codigo);
-
-//            System.out.println(k);
-
-            ArrayList<String> mitadSuperior = cortaMitadSuperior(codigo, k);
-            ArrayList<String> mitadInferior = cortaMitadInferior(codigo, k);
-
-//            System.out.println("mitadSuperior" + mitadSuperior);
-//            System.out.println("mitadInferior" + mitadInferior);
-
-            encode(mitadSuperior, codificacion + '0');
-            encode(mitadInferior, codificacion + '1');
+            generaShannonFano(cortaMitadSuperior(codigo, k), codificacion + '0');
+            generaShannonFano(cortaMitadInferior(codigo, k), codificacion + '1');
         }
     }
 
