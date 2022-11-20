@@ -123,9 +123,9 @@ public class PrimeraParte {
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/compresion.Fan";
+            outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/compresion.Fan";
+            outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);

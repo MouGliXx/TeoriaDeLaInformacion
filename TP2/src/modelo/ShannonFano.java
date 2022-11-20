@@ -23,6 +23,10 @@ public class ShannonFano {
         System.out.println(redundancia);
     }
 
+    public HashMap<String, String> getShannonFano() {
+        return shannonFano;
+    }
+
     public int sumaTotalFrencuencias(ArrayList<String> codigo) {
         int total = 0;
 
