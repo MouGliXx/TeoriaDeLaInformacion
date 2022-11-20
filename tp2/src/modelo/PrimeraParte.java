@@ -1,9 +1,12 @@
 package modelo;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import static modelo.Huffman.construyeArbolHuffman;
 
 public class PrimeraParte {
     private String sistemaOperativo;
@@ -13,6 +16,9 @@ public class PrimeraParte {
     private HashMap<String, Double> informacion;
     private double entropia;
     private int orden;
+    private Map<String,String> arbolHuffman;
+    private double rendimientoHuffman,redundanciaHuffman;
+
 
     public PrimeraParte(BufferedReader archivo) {
         sistemaOperativo = System.getProperty("os.name");
@@ -54,6 +60,10 @@ public class PrimeraParte {
 
 //        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
 //        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
+
+        arbolHuffman=construyeArbolHuffman(frecuencias);
+        rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
+        redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -138,4 +148,56 @@ public class PrimeraParte {
 
         return resultado;
     }
+
+    public double calculaLongitudMediaHuffman(Map<String,String> arbolHuffman,HashMap<String, Integer> frecuencias,ArrayList<String> diccionario){
+        int aparicionesTotales=diccionario.size();
+        double longitudMedia=0;
+        double probabilidad;
+        for (Map.Entry<String, String> arbolHuff : arbolHuffman.entrySet()) {
+            probabilidad=0;
+            for (Map.Entry<String, Integer> fre : frecuencias.entrySet()) {
+                if(fre.getKey()==arbolHuff.getKey()){
+                    probabilidad=fre.getValue();
+                }
+            }
+            longitudMedia+=arbolHuff.getValue().length()*(probabilidad/aparicionesTotales);
+        }
+        System.out.println("La longitud media es: "+longitudMedia);
+        return longitudMedia;
+    }
+
+    public double calculaRendimiento(double longitudMedia,double entropia){
+        return entropia/longitudMedia;
+    }
+
+    public double calculaRedundancia(double rendimiento){
+        return 1-rendimiento;
+    }
+    
+
+    public void generarArchivoIncisoHuffman() throws IOException {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
+
+        fileWriter = new FileWriter(outputFileName, false);
+        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+        try {
+            bfwriter.write("\tTasa de compresion:"+ "\n");
+            bfwriter.write("\tRendimiento: "+rendimientoHuffman+ "\n");
+            bfwriter.write("\tRedundancia: "+redundanciaHuffman+ "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("\tArchivo 'Huffman.txt' modificado satisfactoriamente...");
+        bfwriter.close();
+        fileWriter.close();
+    }
+
 }
