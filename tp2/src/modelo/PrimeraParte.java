@@ -1,6 +1,8 @@
 package modelo;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,36 +26,13 @@ public class PrimeraParte {
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
 
-//        System.out.println(orden);
-//        System.out.println(entropia);
 
-        //PRUEBAS
-        HashMap<String, Integer> auxFr = new HashMap<>();
-        ArrayList<String> auxCod = new ArrayList<>();
+        // { HUFFMAN }
 
-        auxCod.add("a");
-        auxCod.add("b");
-        auxCod.add("c");
-        auxCod.add("d");
-        auxCod.add("e");
-        auxCod.add("f");
-        auxCod.add("g");
-        auxCod.add("h");
-
-        auxFr.put("a",40);
-        auxFr.put("b",20);
-        auxFr.put("c",15);
-        auxFr.put("d",10);
-        auxFr.put("e",6);
-        auxFr.put("f",4);
-        auxFr.put("g",3);
-        auxFr.put("h",2);
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
-//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(codigo);
 
-//        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
-//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
+        generaArchivoShannonFano();
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -137,5 +116,25 @@ public class PrimeraParte {
         }
 
         return resultado;
+    }
+
+    public void generaArchivoShannonFano() {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/compresion.Fan";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/compresion.Fan";
+
+        try {
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+            //...
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
