@@ -37,9 +37,8 @@ public class PrimeraParte {
         longitudMediaHuffman=calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario);
         cantidadSimbolosHuffman=arbolHuffman.size();
 
-        generaTablaHuffman();
         generaCompresionHuffman(diccionario,arbolHuffman);
-        //generarArchivoHuffman();
+        generaArchivoHuffman();
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -214,9 +213,9 @@ public class PrimeraParte {
         int i, limite;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
+            outputFileName = "Archivos Generados/Primera Parte/ShannonFano.Fan";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
+            outputFileName = "../Archivos Generados/Primera Parte/ShannonFano.Fan";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
@@ -244,7 +243,7 @@ public class PrimeraParte {
                 bfwriter.write(ochoBits);
             }
 
-            System.out.println("\tArchivo 'Compresion.Fan' creado satisfactoriamente.");
+            System.out.println("\tArchivo 'ShannonFano.Fan' creado satisfactoriamente.");
             bfwriter.close();
             fileWriter.close();
         } catch (IOException e) {
@@ -259,9 +258,9 @@ public class PrimeraParte {
         int i, limite;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/compresion.Huf";
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/compresion.Huf";
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.Huf";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
@@ -289,7 +288,7 @@ public class PrimeraParte {
                 bfwriter.write(ochoBits);
             }
 
-            System.out.println("\tArchivo 'compresion.Huf' creado satisfactoriamente.");
+            System.out.println("\tArchivo 'Huffman.Huf' creado satisfactoriamente.");
             bfwriter.close();
             fileWriter.close();
         } catch (IOException e) {
@@ -297,7 +296,7 @@ public class PrimeraParte {
         }
     }
 
-    public void generaTablaHuffman () {
+    public void generaArchivoHuffman() {
         String outputFileName;
         FileWriter fileWriter;
 
@@ -320,11 +319,10 @@ public class PrimeraParte {
             for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
                 bfwriter.write(entry.getKey() + " : "+ entry.getValue() + "- FRECUENCIA: "+frecuencias.get(entry.getKey())+ "\n");
             }
-            System.out.println("\tArchivo 'TablaHuffman.txt' modificado satisfactoriamente...");
+            System.out.println("\tArchivo 'Huffman.txt' modificado satisfactoriamente...");
 
             bfwriter.close();
             fileWriter.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
