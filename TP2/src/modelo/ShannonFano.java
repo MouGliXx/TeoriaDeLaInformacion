@@ -8,23 +8,30 @@ public class ShannonFano {
     private HashMap<String, String> shannonFano = new HashMap<>();
     private double longitudMedia, rendimiento, redundancia;
 
-    public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia) {
+    public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia, int total) {
         this.frecuencias = frecuencias;
         generaShannonFano(codigo, "");
-        longitudMedia = longitudMedia(frecuencias, frecuencias.size(), shannonFano);
+        longitudMedia = longitudMedia(frecuencias, total, shannonFano);
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
-
 //        for (String key : frecuencias.keySet())
 //            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
-
-        System.out.println(longitudMedia);
-        System.out.println(rendimiento);
-        System.out.println(redundancia);
     }
 
     public HashMap<String, String> getShannonFano() {
         return shannonFano;
+    }
+
+    public double getLongitudMedia() {
+        return longitudMedia;
+    }
+
+    public double getRendimiento() {
+        return rendimiento;
+    }
+
+    public double getRedundancia() {
+        return redundancia;
     }
 
     public int sumaTotalFrencuencias(ArrayList<String> codigo) {
