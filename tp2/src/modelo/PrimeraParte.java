@@ -29,7 +29,6 @@ public class PrimeraParte {
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
 
-        System.out.println(entropia);
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 
@@ -39,6 +38,7 @@ public class PrimeraParte {
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
 
+        generaTablaHuffman();
         generarArchivoHuffman();
     }
 
@@ -131,7 +131,6 @@ public class PrimeraParte {
             }
             longitudMedia += arbolHuff.getValue().length() * (probabilidad/aparicionesTotales);
         }
-        System.out.println("La longitud media es: "+longitudMedia);
 
         return longitudMedia;
     }
@@ -171,8 +170,9 @@ public class PrimeraParte {
     public String codificaHuffman(Map<String,String> arbolHuffman, ArrayList<String> diccionario){
         Iterator<String> it = diccionario.iterator();
         String codificacion="";
-        while(it.hasNext()){
-            codificacion+=arbolHuffman.get(it);
+
+        for (String palabra : diccionario) {
+            codificacion+=arbolHuffman.get(palabra);
         }
         return codificacion;
     }
@@ -206,21 +206,21 @@ public class PrimeraParte {
         int longitudMaximaPalabra,longitudMaximaCodificacion;
         String codificacion=codificaHuffman(arbolHuffman,diccionario);
 
+
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/Huffman.dat";
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/Huffman.dat";
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.Huf";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            longitudMaximaPalabra=longitudMaximaPalabra((HashMap<String, String>) arbolHuffman);
-            longitudMaximaCodificacion=longitudMaximaCodificacion((HashMap<String, String>) arbolHuffman);
 
             byte aux;
             byte ochoBits;
-            int limite,i,n=0;
+            int limite,i,n=0,j=0;
+
 
             while (n < codificacion.length()-1) {
                 if(codificacion.length()-1-n>8)
@@ -242,6 +242,8 @@ public class PrimeraParte {
                     i++;
                     n++;
                 }
+                j++;
+                System.out.println(j);
                 bfwriter.write(ochoBits);
             }
 
@@ -251,10 +253,36 @@ public class PrimeraParte {
 
 
 
-            System.out.println("\tArchivo 'Huffman.dat' modificado satisfactoriamente...");
+            System.out.println("\tArchivo 'Huffman.Huf' modificado satisfactoriamente...");
 
             bfwriter.close();
             fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void generaTablaHuffman () {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/TablaHuffman.txt";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/TablaHuffman.txt";
+
+        try {
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+            for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
+                bfwriter.write(entry.getKey() + " : "+ entry.getValue() + "\n");
+            }
+            System.out.println("\tArchivo 'TablaHuffman.txt' modificado satisfactoriamente...");
+
+            bfwriter.close();
+            fileWriter.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
