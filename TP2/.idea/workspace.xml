@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ab75a071-ba69-4c1f-b377-cd858fba2f06" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Archivos Generados/Primera Parte/compresion.Fan" beforeDir="false" afterPath="$PROJECT_DIR$/Archivos Generados/Primera Parte/compresion.Fan" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/tp2/modelo/ShannonFano.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tp2/modelo/ShannonFano.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modelo/ShannonFano.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/ShannonFano.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
