@@ -33,7 +33,7 @@ public class PrimeraParte {
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 
-        generaArchivoShannonFano();
+        generaArchivoShannonFano(diccionario.size(), longitudMaximaPalabra(shannonFano.getShannonFano()), longitudMaximaCodificacion(shannonFano.getShannonFano()));
 
         arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
@@ -166,22 +166,24 @@ public class PrimeraParte {
         return max;
     }
 
-    public void generaArchivoShannonFano() {
+    public void generaArchivoShannonFano(int cantSimbolos, int longMaxPalabras, int longMaxCodigo) {
         String outputFileName;
         FileWriter fileWriter;
-
-        byte hola = 0b0;
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
         else
             outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
 
+        System.out.println(cantSimbolos);
+        System.out.println(longMaxPalabras);
+        System.out.println(longMaxCodigo);
+
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            bfwriter.write(hola);
+            //....
         } catch (IOException e) {
             e.printStackTrace();
         }
