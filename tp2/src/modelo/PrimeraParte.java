@@ -11,29 +11,24 @@ import static modelo.Huffman.construyeArbolHuffman;
 public class PrimeraParte {
     private String sistemaOperativo;
     private ArrayList<String> diccionario, codigo;
-    private ArrayList<Character> simbolos;
     private HashMap<String, Integer> frecuencias;
     private HashMap<String, Double> informacion;
     private double entropia;
-    private int orden;
     private Map<String,String> arbolHuffman;
     private double rendimientoHuffman,redundanciaHuffman;
 
     public PrimeraParte(BufferedReader archivo) {
         sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
-        simbolos = extraeSimbolos(diccionario);
-        orden = simbolos.size();
         frecuencias = calculaFrecuencias(diccionario);
         codigo = identificaPalabrasCodigo(frecuencias);
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
 
-        System.out.println(entropia);
+        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia, diccionario.size());
 
-        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
-
-        generaArchivoShannonFano(diccionario.size(), longitudMaximaPalabra(shannonFano.getShannonFano()), longitudMaximaCodificacion(shannonFano.getShannonFano()));
+        generaArchivoShannonFano(frecuencias.size(), shannonFano);
+        generaCompresionShannonFano(diccionario, shannonFano.getShannonFano());
 
         arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
@@ -166,24 +161,77 @@ public class PrimeraParte {
         return max;
     }
 
-    public void generaArchivoShannonFano(int cantSimbolos, int longMaxPalabras, int longMaxCodigo) {
+    public void generaArchivoShannonFano(int cantSimbolos, ShannonFano shannonFano) {
         String outputFileName;
         FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/ShannonFano.txt";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/ShannonFano.txt";
+
+        try {
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+            bfwriter.write("Cantidad de simboos = " + cantSimbolos + "\n");
+            bfwriter.write("Longitud media = " + shannonFano.getLongitudMedia() + "\n");
+            bfwriter.write("Rendimiento = " + shannonFano.getRendimiento() + "\n");
+            bfwriter.write("Redundancia = " + shannonFano.getRedundancia() + "\n");
+            bfwriter.write("\nDiccionario de Codificación por Shannon-Fano\n\n");
+            bfwriter.write("SIMBOLO\t\t\t\tCODIFICACION\n");
+            for (String palabra : frecuencias.keySet()) {
+                bfwriter.write(palabra + "\t\t\t\t" + shannonFano.getShannonFano().get(palabra) + "\n");
+            }
+
+            System.out.println("\tArchivo 'ShannonFano.txt' creado satisfactoriamente.");
+            bfwriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void generaCompresionShannonFano(ArrayList<String> diccionario, Map<String,String> shannonFano) {
+        String outputFileName;
+        FileWriter fileWriter;
+        byte ochoBits, aux;
+        int i, limite;
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
         else
             outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
 
-        System.out.println(cantSimbolos);
-        System.out.println(longMaxPalabras);
-        System.out.println(longMaxCodigo);
-
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            //....
+            for (String palabra : diccionario) {
+                if(palabra.length()-1 > 8)
+                    limite = 8;
+                else
+                    limite = palabra.length()-1;
+
+                i = 0;
+                ochoBits = 0b0;
+                while (i < limite) {
+                    if (shannonFano.get(palabra).charAt(i) == '1') {
+                        aux = 0b1;
+                        ochoBits = (byte) (ochoBits << 1);
+                        ochoBits |= (aux);
+                    } else {
+                        ochoBits = (byte) (ochoBits << 1);
+                    }
+
+                    i++;
+                }
+                bfwriter.write(ochoBits);
+            }
+
+            System.out.println("\tArchivo 'Compresion.Fan' creado satisfactoriamente.");
+            bfwriter.close();
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
