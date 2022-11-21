@@ -15,7 +15,8 @@ public class PrimeraParte {
     private HashMap<String, Double> informacion;
     private double entropia;
     private Map<String,String> arbolHuffman;
-    private double rendimientoHuffman,redundanciaHuffman;
+    private double rendimientoHuffman,redundanciaHuffman,longitudMediaHuffman;
+    private int cantidadSimbolosHuffman;
 
     public PrimeraParte(BufferedReader archivo) {
         sistemaOperativo = System.getProperty("os.name");
@@ -33,6 +34,8 @@ public class PrimeraParte {
         arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
+        longitudMediaHuffman=calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario);
+        cantidadSimbolosHuffman=arbolHuffman.size();
 
         generaTablaHuffman();
         generaCompresionHuffman(diccionario,arbolHuffman);
@@ -128,7 +131,6 @@ public class PrimeraParte {
             }
             longitudMedia += arbolHuff.getValue().length() * (probabilidad/aparicionesTotales);
         }
-
         return longitudMedia;
     }
 
@@ -300,16 +302,23 @@ public class PrimeraParte {
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/TablaHuffman.txt";
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/TablaHuffman.txt";
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
+            bfwriter.write("Cantidad de simbolos = " + cantidadSimbolosHuffman + "\n");
+            bfwriter.write("Longitud media = " + longitudMediaHuffman + "\n");
+            bfwriter.write("Rendimiento = " + rendimientoHuffman+ "\n");
+            bfwriter.write("Redundancia = " + redundanciaHuffman + "\n");
+            bfwriter.write("\nDiccionario de Codificación por Huffman\n\n");
+            bfwriter.write("SIMBOLO\t\t\t\tCODIFICACION\n");
+
             for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-                bfwriter.write(entry.getKey() + " : "+ entry.getValue() + "\n");
+                bfwriter.write(entry.getKey() + " : "+ entry.getValue() + "- FRECUENCIA: "+frecuencias.get(entry.getKey())+ "\n");
             }
             System.out.println("\tArchivo 'TablaHuffman.txt' modificado satisfactoriamente...");
 
