@@ -261,7 +261,7 @@ public class SegundaParte {
         return 1-rendimiento;
     }
 
-    public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman,ArrayList<String> cadenas){
+    public String reconstruyeArbolOriginalCodificado(Map<String,String> arbolHuffman, ArrayList<String> cadenas) {
         String reconstruccion="";
         for (String cadena : cadenas) {
             reconstruccion += arbolHuffman.get(cadena);
@@ -516,11 +516,10 @@ public class SegundaParte {
 
         byte aux;
         byte ochoBits;
-        int limite,i,n=0;
+        int limite, i, n = 0;
 
-
-        while (n<(reconstruccion3C.length()-1)) {
-            if(reconstruccion3C.length()-n-1>8)
+        while (n < reconstruccion3C.length()-1) {
+            if(reconstruccion3C.length()-n-1 > 8)
                 limite=8;
             else
                 limite=reconstruccion3C.length()-n-1;
@@ -531,16 +530,14 @@ public class SegundaParte {
                     aux = 0b1;
                     ochoBits = (byte) (ochoBits << 1);
                     ochoBits |= (aux);
+                } else {
+                    ochoBits = (byte) (ochoBits << 1);
                 }
-                else
-                    ochoBits= (byte) (ochoBits<<1);
                 i++;
                 n++;
-
             }
             bfwriter.write(ochoBits);
         }
-
 
         System.out.println("\tArchivo 'IncisoE1.dat' modificado satisfactoriamente...");
         bfwriter.close();
@@ -584,7 +581,6 @@ public class SegundaParte {
         byte aux;
         byte ochoBits;
         int limite,i,n=0;
-
 
         while (n<(reconstruccion5C.length()-1)) {
             if(reconstruccion5C.length()-n-1>8)
@@ -652,25 +648,25 @@ public class SegundaParte {
         byte ochoBits;
         int limite,i,n=0;
 
-
-        while (n<(reconstruccion7C.length()-1)) {
-            if(reconstruccion7C.length()-n-1>8)
-                limite=8;
+        while (n < reconstruccion7C.length()-1) {
+            if(reconstruccion7C.length()-1-n>8)
+                limite = 8;
             else
-                limite=reconstruccion7C.length()-n-1;
-            i=0;
-            ochoBits=0b0;
-            while(i<limite) {
+                limite = reconstruccion7C.length()-1-n;
+
+            i = 0;
+            ochoBits = 0b0;
+            while(i < limite) {
                 if (reconstruccion7C.charAt(n) == '1') {
                     aux = 0b1;
                     ochoBits = (byte) (ochoBits << 1);
                     ochoBits |= (aux);
+                } else {
+                    ochoBits = (byte) (ochoBits << 1);
                 }
-                else
-                    ochoBits= (byte) (ochoBits<<1);
+
                 i++;
                 n++;
-
             }
             bfwriter.write(ochoBits);
         }

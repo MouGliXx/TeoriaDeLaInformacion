@@ -68,9 +68,11 @@ public class SegundaParte {
     public double getPerdida(){
         return perdida;
     }
+
     public double getRuido(){
         return ruido;
     }
+
     public double[] getEntropiaPosteriori (){
         return entropiaPosteriori;
     }

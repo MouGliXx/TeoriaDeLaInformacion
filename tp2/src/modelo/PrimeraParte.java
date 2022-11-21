@@ -27,14 +27,14 @@ public class PrimeraParte {
         frecuencias = calculaFrecuencias(diccionario);
         codigo = identificaPalabrasCodigo(frecuencias);
         informacion = calculaInformacion(frecuencias, diccionario.size());
-        entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
+        entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
 
         System.out.println(entropia);
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
 
         generaArchivoShannonFano();
-        
+
         arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
@@ -104,10 +104,10 @@ public class PrimeraParte {
         return informacion;
     }
 
-    public double calculaEntropia(ArrayList<String> codigo, HashMap<String, Double> informacion, HashMap<String, Integer> frecuencias, int total) {
+    public double calculaEntropia(HashMap<String, Double> informacion, HashMap<String, Integer> frecuencias, int total) {
         double resultado = 0;
 
-        for (String key : codigo) {
+        for (String key : frecuencias.keySet()) {
             double probabilidad = (double) frecuencias.get(key) / total;
             resultado += informacion.get(key) * probabilidad;
         }
@@ -116,19 +116,21 @@ public class PrimeraParte {
     }
 
     public double calculaLongitudMediaHuffman(Map<String,String> arbolHuffman,HashMap<String, Integer> frecuencias,ArrayList<String> diccionario){
-        int aparicionesTotales=diccionario.size();
-        double longitudMedia=0;
+        int aparicionesTotales = diccionario.size();
+        double longitudMedia = 0;
         double probabilidad;
+
         for (Map.Entry<String, String> arbolHuff : arbolHuffman.entrySet()) {
             probabilidad=0;
             for (Map.Entry<String, Integer> fre : frecuencias.entrySet()) {
                 if(fre.getKey().equals(arbolHuff.getKey())){
-                    probabilidad=fre.getValue();
+                    probabilidad = fre.getValue();
                 }
             }
-            longitudMedia+=arbolHuff.getValue().length()*(probabilidad/aparicionesTotales);
+            longitudMedia += arbolHuff.getValue().length() * (probabilidad/aparicionesTotales);
         }
         System.out.println("La longitud media es: "+longitudMedia);
+
         return longitudMedia;
     }
 
@@ -140,9 +142,35 @@ public class PrimeraParte {
         return 1-rendimiento;
     }
 
+    public int longitudMaximaPalabra(HashMap<String, String> codificacion) {
+        int max = -1;
+
+        for (String palabra : codificacion.keySet()) {
+            if (palabra.length() > max) {
+                max = palabra.length();
+            }
+        }
+
+        return max;
+    }
+
+    public int longitudMaximaCodificacion(HashMap<String, String> codificacion) {
+        int max = -1;
+
+        for (String palabra : codificacion.keySet()) {
+            if (codificacion.get(palabra).length() > max) {
+                max = codificacion.get(palabra).length();
+            }
+        }
+
+        return max;
+    }
+
     public void generaArchivoShannonFano() {
         String outputFileName;
         FileWriter fileWriter;
+
+        byte hola = 0b0;
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
@@ -153,7 +181,7 @@ public class PrimeraParte {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            //...
+            bfwriter.write(hola);
         } catch (IOException e) {
             e.printStackTrace();
         }
