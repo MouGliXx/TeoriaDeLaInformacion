@@ -14,8 +14,11 @@ public class ShannonFano {
         longitudMedia = longitudMedia(frecuencias, total, shannonFano);
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
-//        for (String key : frecuencias.keySet())
-//            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
+
+        System.out.println(frecuencias.size());
+
+        for (String key : frecuencias.keySet())
+            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
     }
 
     public HashMap<String, String> getShannonFano() {

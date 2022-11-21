@@ -305,9 +305,9 @@ public class PrimeraParte {
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/TablaHuffman.txt";
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/TablaHuffman.txt";
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
