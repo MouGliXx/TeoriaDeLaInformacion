@@ -44,7 +44,7 @@ public class PrimeraParte {
 
         generaArchivoShannonFano();
 
-        arbolHuffman=construyeArbolHuffman(frecuencias);
+        arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
     }
@@ -156,24 +156,12 @@ public class PrimeraParte {
     public double calculaRedundancia(double rendimiento){
         return 1-rendimiento;
     }
-    
 
     public void generaArchivoShannonFano() {
         String outputFileName;
         FileWriter fileWriter;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
-
-        fileWriter = new FileWriter(outputFileName, false);
-        BufferedWriter bfwriter = new BufferedWriter(fileWriter);
-
-        try {
-            bfwriter.write("\tTasa de compresion:"+ "\n");
-            bfwriter.write("\tRendimiento: "+rendimientoHuffman+ "\n");
-            bfwriter.write("\tRedundancia: "+redundanciaHuffman+ "\n");
             outputFileName = "Archivos Generados/Primera Parte/Compresion.Fan";
         else
             outputFileName = "../Archivos Generados/Primera Parte/Compresion.Fan";
@@ -186,10 +174,31 @@ public class PrimeraParte {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("\tArchivo 'Huffman.txt' modificado satisfactoriamente...");
-        bfwriter.close();
-        fileWriter.close();
     }
+
+    public void generarArchivoHuffman() {
+        String outputFileName;
+        FileWriter fileWriter;
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
+
+        try {
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+            bfwriter.write("\tTasa de compresion:" + "\n");
+            bfwriter.write("\tRendimiento: " + rendimientoHuffman+ "\n");
+            bfwriter.write("\tRedundancia: " + redundanciaHuffman+ "\n");
+
+            System.out.println("\tArchivo 'Huffman.txt' modificado satisfactoriamente...");
+
+            bfwriter.close();
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

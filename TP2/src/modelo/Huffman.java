@@ -20,7 +20,7 @@ class Nodo {
     }
 }
 
-class comparadorNodo implements  Comparator<Nodo>{
+class comparadorNodo implements  Comparator<Nodo> {
     public int compare(Nodo n1,Nodo n2){
         return n1.frecuencia-n2.frecuencia;
     }
