@@ -1,4 +1,4 @@
-Cantidad de simboos = 4153
+Cantidad de simbolos = 4153
 Longitud media = 9.355229149593251
 Rendimiento = 0.9953819652238401
 Redundancia = 0.004618034776159852

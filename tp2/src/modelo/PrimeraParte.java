@@ -24,7 +24,7 @@ public class PrimeraParte {
         codigo = identificaPalabrasCodigo(frecuencias);
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
-        
+
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia, diccionario.size());
 
         generaArchivoShannonFano(frecuencias.size(), shannonFano);
@@ -35,7 +35,8 @@ public class PrimeraParte {
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
 
         generaTablaHuffman();
-        generarArchivoHuffman();
+        generaCompresionHuffman(diccionario,arbolHuffman);
+        //generarArchivoHuffman();
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -186,7 +187,7 @@ public class PrimeraParte {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            bfwriter.write("Cantidad de simboos = " + cantSimbolos + "\n");
+            bfwriter.write("Cantidad de simbolos = " + cantSimbolos + "\n");
             bfwriter.write("Longitud media = " + shannonFano.getLongitudMedia() + "\n");
             bfwriter.write("Rendimiento = " + shannonFano.getRendimiento() + "\n");
             bfwriter.write("Redundancia = " + shannonFano.getRedundancia() + "\n");
@@ -249,38 +250,31 @@ public class PrimeraParte {
         }
     }
 
-    public void generarArchivoHuffman() {
+    public void generaCompresionHuffman(ArrayList<String> diccionario, Map<String,String> huffman) {
         String outputFileName;
         FileWriter fileWriter;
-        int longitudMaximaPalabra,longitudMaximaCodificacion;
-        String codificacion=codificaHuffman(arbolHuffman,diccionario);
-
+        byte ochoBits, aux;
+        int i, limite;
 
         if (sistemaOperativo.startsWith("Windows"))
-            outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";
+            outputFileName = "Archivos Generados/Primera Parte/compresion.Huf";
         else
-            outputFileName = "../Archivos Generados/Primera Parte/Huffman.Huf";
+            outputFileName = "../Archivos Generados/Primera Parte/compresion.Huf";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-
-            byte aux;
-            byte ochoBits;
-            int limite,i,n=0,j=0;
-
-
-            while (n < codificacion.length()-1) {
-                if(codificacion.length()-1-n>8)
+            for (String palabra : diccionario) {
+                if(palabra.length()-1 > 8)
                     limite = 8;
                 else
-                    limite = codificacion.length()-1-n;
+                    limite = palabra.length()-1;
 
                 i = 0;
                 ochoBits = 0b0;
-                while(i < limite) {
-                    if (codificacion.charAt(n) == '1') {
+                while (i < limite) {
+                    if (huffman.get(palabra).charAt(i) == '1') {
                         aux = 0b1;
                         ochoBits = (byte) (ochoBits << 1);
                         ochoBits |= (aux);
@@ -289,21 +283,11 @@ public class PrimeraParte {
                     }
 
                     i++;
-                    n++;
                 }
-                j++;
-                System.out.println(j);
                 bfwriter.write(ochoBits);
             }
 
-            //TASA DE COMPRESION
-            System.out.println("El rendimiento de huffman es: "+rendimientoHuffman);
-            System.out.println("La redundancia de huffman es: "+redundanciaHuffman);
-
-
-
-            System.out.println("\tArchivo 'Huffman.Huf' modificado satisfactoriamente...");
-
+            System.out.println("\tArchivo 'compresion.Huf' creado satisfactoriamente.");
             bfwriter.close();
             fileWriter.close();
         } catch (IOException e) {
