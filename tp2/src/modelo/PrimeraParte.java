@@ -1,9 +1,12 @@
 package modelo;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import static modelo.Huffman.construyeArbolHuffman;
 
 public class PrimeraParte {
     private String sistemaOperativo;
@@ -13,6 +16,9 @@ public class PrimeraParte {
     private HashMap<String, Double> informacion;
     private double entropia;
     private int orden;
+    private Map<String,String> arbolHuffman;
+    private double rendimientoHuffman,redundanciaHuffman;
+
 
     public PrimeraParte(BufferedReader archivo) {
         sistemaOperativo = System.getProperty("os.name");
@@ -35,15 +41,12 @@ public class PrimeraParte {
 
 //        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
 //        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
-<<<<<<< HEAD
 
         generaArchivoShannonFano();
 
         arbolHuffman=construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
-=======
->>>>>>> parent of aa120c1 (avances huffman)
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
