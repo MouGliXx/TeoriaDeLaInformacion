@@ -27,6 +27,7 @@ public class App {
         }
 
         //PRIMERA PARTE
+        System.out.println("PRIMERA PARTE:");
         PrimeraParte primeraParte = new PrimeraParte(archivo);
 
 //        double[][] matrizC1 = new double[5][3];
