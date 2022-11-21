@@ -19,7 +19,6 @@ public class PrimeraParte {
     private Map<String,String> arbolHuffman;
     private double rendimientoHuffman,redundanciaHuffman;
 
-
     public PrimeraParte(BufferedReader archivo) {
         sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
@@ -30,20 +29,12 @@ public class PrimeraParte {
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(codigo, informacion, frecuencias, diccionario.size());
 
-
-        // { HUFFMAN }
-
-
-//        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
+        System.out.println(entropia);
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia);
-//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(codigo);
-
-//        ShannonFano shannonFano = new ShannonFano(auxCod, auxFr, entropia);
-//        codificacionShannonFano = shannonFano.construyeArbolShannonFano(auxCod);
 
         generaArchivoShannonFano();
-
+        
         arbolHuffman = construyeArbolHuffman(frecuencias);
         rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
         redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
@@ -56,9 +47,7 @@ public class PrimeraParte {
         try {
             while ((linea = archivo.readLine()) != null) {
                 String[] palabras = linea.split("\\s+");
-                for (String palabra : palabras) {
-                    datos.add(palabra);
-                }
+                Collections.addAll(datos, palabras);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,13 +71,7 @@ public class PrimeraParte {
     }
 
     public ArrayList<String> identificaPalabrasCodigo(HashMap<String, Integer> frecuencias) {
-        ArrayList<String> alfabeto = new ArrayList<>();
-
-        for (String palabra: frecuencias.keySet()) {
-            alfabeto.add(palabra);
-        }
-
-        return alfabeto;
+        return new ArrayList<>(frecuencias.keySet());
     }
 
     public HashMap<String, Integer> calculaFrecuencias(ArrayList<String> datos) {
@@ -106,8 +89,8 @@ public class PrimeraParte {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    public double logOrden(double x) {
-        return Math.log(x) / Math.log(orden);
+    public double log2(double x) {
+        return Math.log(x) / Math.log(2);
     }
 
     public HashMap<String, Double> calculaInformacion(HashMap<String, Integer> frecuencias, int total) {
@@ -115,7 +98,7 @@ public class PrimeraParte {
 
         frecuencias.forEach((palabra, fr) -> {
             double probabilidad = (double) fr / total;
-            informacion.put(palabra, logOrden(1 / probabilidad));
+            informacion.put(palabra, log2(1 / probabilidad));
         });
 
         return informacion;
@@ -139,7 +122,7 @@ public class PrimeraParte {
         for (Map.Entry<String, String> arbolHuff : arbolHuffman.entrySet()) {
             probabilidad=0;
             for (Map.Entry<String, Integer> fre : frecuencias.entrySet()) {
-                if(fre.getKey()==arbolHuff.getKey()){
+                if(fre.getKey().equals(arbolHuff.getKey())){
                     probabilidad=fre.getValue();
                 }
             }

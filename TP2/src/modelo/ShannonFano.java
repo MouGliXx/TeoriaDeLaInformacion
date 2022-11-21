@@ -15,8 +15,8 @@ public class ShannonFano {
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
 
-        for (String key : frecuencias.keySet())
-            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
+//        for (String key : frecuencias.keySet())
+//            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
 
         System.out.println(longitudMedia);
         System.out.println(rendimiento);
