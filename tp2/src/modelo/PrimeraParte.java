@@ -27,7 +27,6 @@ public class PrimeraParte {
         entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
 
         ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia, diccionario.size());
-
         generaArchivoShannonFano(frecuencias.size(), shannonFano);
         generaCompresionShannonFano(diccionario, shannonFano.getShannonFano());
 
@@ -55,20 +54,6 @@ public class PrimeraParte {
         }
 
         return datos;
-    }
-
-    public ArrayList<Character> extraeSimbolos(ArrayList<String> diccionario) {
-        ArrayList<Character> simbolos = new ArrayList<>();
-
-        for (String palabra : diccionario) {
-            for (int i = 0; i < palabra.length(); i++) {
-                if (!simbolos.contains(palabra.charAt(i))) {
-                    simbolos.add(palabra.charAt(i));
-                }
-            }
-        }
-
-        return simbolos;
     }
 
     public ArrayList<String> identificaPalabrasCodigo(HashMap<String, Integer> frecuencias) {
@@ -316,9 +301,10 @@ public class PrimeraParte {
             bfwriter.write("\nDiccionario de Codificación por Huffman\n\n");
             bfwriter.write("SIMBOLO\t\t\t\tCODIFICACION\n");
 
-            for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
-                bfwriter.write(entry.getKey() + " : "+ entry.getValue() + "- FRECUENCIA: "+frecuencias.get(entry.getKey())+ "\n");
+            for (String palabra : frecuencias.keySet()) {
+                bfwriter.write(palabra + "\t\t\t\t" + arbolHuffman.get(palabra) + "\n");
             }
+
             System.out.println("\tArchivo 'Huffman.txt' modificado satisfactoriamente...");
 
             bfwriter.close();

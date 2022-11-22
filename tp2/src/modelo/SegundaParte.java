@@ -73,7 +73,7 @@ public class SegundaParte {
         return ruido;
     }
 
-    public double[] getEntropiaPosteriori (){
+    public double[] getEntropiaPosteriori(){
         return entropiaPosteriori;
     }
 
@@ -103,6 +103,7 @@ public class SegundaParte {
                 v[f][c] = matriz[f][c]*probPriori[f]/probSalida[c];
         return v;
     }
+
     private double[][] calcularProbSucesoSimultaneo(){
         double [][] v = new double[i][j];
         for (int c = 0 ; c < j ; c++)
@@ -117,6 +118,7 @@ public class SegundaParte {
             entropia += probSalida[f]*(Math.log(1/probSalida[f])/Math.log(2.));
         return entropia;
     }
+
     private double calcEntropiaPriori(){
         double entropia = 0;
         for (int f = 0 ; f < i ; f++)
@@ -163,6 +165,7 @@ public class SegundaParte {
     private double calcRuido(){
         return this.entropiaAfin-this.entropiaSalida;
     }
+
     private double calcInformacionMutuaSimetrica(){
         return this.entropiaPriori+this.entropiaSalida-this.entropiaAfin;
     }
@@ -181,6 +184,7 @@ public class SegundaParte {
             System.out.print(v + " ");
         System.out.println();
     }
+
     public void mostrarVectorSalida (){
         for (double v : probSalida)
             System.out.print(v + " ");
