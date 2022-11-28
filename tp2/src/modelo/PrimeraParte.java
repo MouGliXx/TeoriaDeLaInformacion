@@ -115,6 +115,7 @@ public class PrimeraParte {
             }
             longitudMedia += arbolHuff.getValue().length() * (probabilidad/aparicionesTotales);
         }
+
         return longitudMedia;
     }
 
@@ -150,13 +151,14 @@ public class PrimeraParte {
         return max;
     }
 
-    public String codificaHuffman(Map<String,String> arbolHuffman, ArrayList<String> diccionario){
+    public String codificaHuffman(Map<String,String> arbolHuffman, ArrayList<String> diccionario) {
         Iterator<String> it = diccionario.iterator();
         String codificacion="";
 
         for (String palabra : diccionario) {
             codificacion+=arbolHuffman.get(palabra);
         }
+
         return codificacion;
     }
 
