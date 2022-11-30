@@ -434,7 +434,6 @@ public class PrimeraParte {
                     }
                     cadenaActual=aux+cadenaActual;
                 }
-                System.out.println("La cadena es: "+cadenaActual);
                 cadenaATraducir+=cadenaActual;
                 pos++;
             }
