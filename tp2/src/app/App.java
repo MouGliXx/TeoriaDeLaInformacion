@@ -28,7 +28,11 @@ public class App {
 
         //PRIMERA PARTE
         System.out.println("PRIMERA PARTE:");
-        PrimeraParte primeraParte = new PrimeraParte(archivo);
+        try {
+            PrimeraParte primeraParte = new PrimeraParte(archivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         double[][] matrizC1 = new double[5][3];
         double[] probPrioriC1 = new double[5];

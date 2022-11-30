@@ -1,9 +1,6 @@
 package modelo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import static modelo.Huffman.construyeArbolHuffman;
@@ -18,7 +15,7 @@ public class PrimeraParte {
     private double rendimientoHuffman,redundanciaHuffman,longitudMediaHuffman;
     private int cantidadSimbolosHuffman;
 
-    public PrimeraParte(BufferedReader archivo) {
+    public PrimeraParte(BufferedReader archivo) throws FileNotFoundException {
         sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
         frecuencias = calculaFrecuencias(diccionario);
@@ -38,6 +35,9 @@ public class PrimeraParte {
 
         generaCompresionHuffman(diccionario,arbolHuffman);
         generaArchivoHuffman();
+
+        decodificaArchivo("Archivos Generados/Primera Parte/Huffman.Huf","Huf");
+        decodificaArchivo("Archivos Generados/Primera Parte/ShannonFano.Fan","Fan");
     }
 
     private ArrayList<String> generaDiccionario(BufferedReader archivo) {
@@ -194,8 +194,10 @@ public class PrimeraParte {
     public void generaCompresionShannonFano(ArrayList<String> diccionario, Map<String,String> shannonFano) {
         String outputFileName;
         FileWriter fileWriter;
-        byte ochoBits, aux;
-        int i, limite;
+        byte ochoBits=0b0, aux;
+        int bitsRestantes=8,j,i;
+        int byteFaltantes;
+        int maxpalabra=longitudMaximaPalabra((HashMap<String, String>) shannonFano),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) shannonFano);
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/ShannonFano.Fan";
@@ -206,26 +208,62 @@ public class PrimeraParte {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            for (String palabra : diccionario) {
-                if(palabra.length()-1 > 8)
-                    limite = 8;
-                else
-                    limite = palabra.length()-1;
 
-                i = 0;
-                ochoBits = 0b0;
-                while (i < limite) {
-                    if (shannonFano.get(palabra).charAt(i) == '1') {
-                        aux = 0b1;
-                        ochoBits = (byte) (ochoBits << 1);
-                        ochoBits |= (aux);
-                    } else {
-                        ochoBits = (byte) (ochoBits << 1);
+            bfwriter.write(shannonFano.size());
+            bfwriter.write(maxpalabra);
+            bfwriter.write(maxCodificacion);
+
+            int numBytes=0;
+
+
+            for (Map.Entry<String, String> entry : shannonFano.entrySet()) {
+                if (entry.getKey().length() < maxpalabra) {
+                    byteFaltantes = maxpalabra - entry.getKey().length();
+                    for (j = 0; j < byteFaltantes; j++) {
+                        ochoBits = 0;
+                        bfwriter.write(ochoBits);
                     }
+                }
+                for (j = 0; j < entry.getKey().length(); j++) {
+                    bfwriter.write(entry.getKey().charAt(j));
+                }
+
+                if (entry.getValue().length() < maxCodificacion) {
+                    byteFaltantes = maxCodificacion - entry.getValue().length();
+                    for (j = 0; j < byteFaltantes; j++) {
+                        ochoBits = 0;
+                        bfwriter.write(ochoBits);
+                    }
+                }
+                for (j = 0; j < entry.getValue().length(); j++) {
+                    bfwriter.write(entry.getValue().charAt(j));
+                }
+            }
+
+            int largo;
+            bitsRestantes=8;
+            ochoBits = 0b0;
+
+            for (String palabra : diccionario) {
+                largo=shannonFano.get(palabra).length();
+                i = 0;
+                while (i < largo) {
+                    if(bitsRestantes==0){
+                        bfwriter.write(ochoBits);
+                        ochoBits = 0b0;
+                        bitsRestantes=8;
+                    }
+                    if (shannonFano.get(palabra).charAt(i) == '1') {
+                        ochoBits |= (0b00000001 << (bitsRestantes-1));
+
+                        /*aux = 0b1;
+                        ochoBits = (byte) (ochoBits << 1);
+                        ochoBits |= (aux);*/
+                    }
+                    bitsRestantes--;
 
                     i++;
                 }
-                bfwriter.write(ochoBits);
             }
 
             System.out.println("\tArchivo 'ShannonFano.Fan' creado satisfactoriamente.");
@@ -240,7 +278,9 @@ public class PrimeraParte {
         String outputFileName;
         FileWriter fileWriter;
         byte ochoBits, aux;
-        int i, limite;
+        int i,j, limite;
+        int byteFaltantes;
+        int maxpalabra=longitudMaximaPalabra((HashMap<String, String>) arbolHuffman),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) arbolHuffman);
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";
@@ -251,26 +291,61 @@ public class PrimeraParte {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
-            for (String palabra : diccionario) {
-                if(palabra.length()-1 > 8)
-                    limite = 8;
-                else
-                    limite = palabra.length()-1;
+            bfwriter.write(arbolHuffman.size());
+            bfwriter.write(maxpalabra);
+            bfwriter.write(maxCodificacion);
 
-                i = 0;
-                ochoBits = 0b0;
-                while (i < limite) {
-                    if (huffman.get(palabra).charAt(i) == '1') {
-                        aux = 0b1;
-                        ochoBits = (byte) (ochoBits << 1);
-                        ochoBits |= (aux);
-                    } else {
-                        ochoBits = (byte) (ochoBits << 1);
+            int numBytes=0;
+
+
+            for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
+                if (entry.getKey().length() < maxpalabra) {
+                    byteFaltantes = maxpalabra - entry.getKey().length();
+                    for (j = 0; j < byteFaltantes; j++) {
+                        ochoBits = 0;
+                        bfwriter.write(ochoBits);
                     }
+                }
+                for (j = 0; j < entry.getKey().length(); j++) {
+                    bfwriter.write(entry.getKey().charAt(j));
+                }
+
+                if (entry.getValue().length() < maxCodificacion) {
+                    byteFaltantes = maxCodificacion - entry.getValue().length();
+                    for (j = 0; j < byteFaltantes; j++) {
+                        ochoBits = 0;
+                        bfwriter.write(ochoBits);
+                    }
+                }
+                for (j = 0; j < entry.getValue().length(); j++) {
+                    bfwriter.write(entry.getValue().charAt(j));
+                }
+            }
+
+            int largo;
+            int bitsRestantes=8;
+            ochoBits = 0b0;
+
+            for (String palabra : diccionario) {
+                largo=huffman.get(palabra).length();
+                i = 0;
+                while (i < largo) {
+                    if(bitsRestantes==0){
+                        bfwriter.write(ochoBits);
+                        ochoBits = 0b0;
+                        bitsRestantes=8;
+                    }
+                    if (huffman.get(palabra).charAt(i) == '1') {
+                        ochoBits |= (0b00000001 << (bitsRestantes-1));
+
+                        /*aux = 0b1;
+                        ochoBits = (byte) (ochoBits << 1);
+                        ochoBits |= (aux);*/
+                    }
+                    bitsRestantes--;
 
                     i++;
                 }
-                bfwriter.write(ochoBits);
             }
 
             System.out.println("\tArchivo 'Huffman.Huf' creado satisfactoriamente.");
@@ -279,6 +354,118 @@ public class PrimeraParte {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void decodificaArchivo(String url,String nombreArchivo){
+        String outputFileName;
+        FileWriter fileWriter;
+
+
+        if (sistemaOperativo.startsWith("Windows"))
+            outputFileName = "Archivos Generados/Primera Parte/reconstruido."+nombreArchivo;
+        else
+            outputFileName = "../Archivos Generados/Primera Parte/reconstruido."+nombreArchivo;
+
+
+        int pos=0,j;
+
+        try {
+            BufferedReader archivo = new BufferedReader(new FileReader(url));
+            //RandomAccessFile archivo=new RandomAccessFile(url, "rw");
+            Map<String,String> tabla = new HashMap<>();
+
+            int numSimbolos=archivo.read();
+            int maxPalabra=archivo.read();
+            int maxCodificacion=archivo.read();
+
+            String linea;
+            String datos="";
+
+
+            while ((linea = archivo.readLine()) != null) {
+                datos+=linea;
+            }
+
+
+            String palabra,codificacion;
+
+            //decodifico la tabla
+
+            for (j=0;j<numSimbolos;j++){
+                palabra="";
+                codificacion="";
+                for (int k=0;k<maxPalabra;k++){
+                    if(datos.charAt(pos)!=0)
+                        palabra+=datos.charAt(pos);
+                    pos++;
+                }
+                for (int l=0;l<maxCodificacion;l++){
+                    if(datos.charAt(pos)!=0)
+                        codificacion+=datos.charAt(pos);
+                    pos++;
+
+                }
+                tabla.put(codificacion,palabra);
+            }
+
+            //decodifico los datos
+
+
+            fileWriter = new FileWriter(outputFileName, false);
+            BufferedWriter bfwriter = new BufferedWriter(fileWriter);
+
+
+            String cadenaATraducir="";
+            String cadenaActual="";
+            String aux="";
+
+            while(datos.length()>pos){
+                aux="";
+                cadenaActual=Integer.toBinaryString(datos.charAt(pos));
+                if(cadenaActual.length()>8){
+                    cadenaActual=cadenaActual.substring(8);
+                }
+                else{
+                    for(int i=0;i<8-cadenaActual.length();i++){
+                        aux+="0";
+                    }
+                    cadenaActual=aux+cadenaActual;
+                }
+                System.out.println("La cadena es: "+cadenaActual);
+                cadenaATraducir+=cadenaActual;
+                pos++;
+            }
+
+            int nuevapos=0;
+            String codificado="";
+
+
+            while (cadenaATraducir.length()>nuevapos){
+                if(tabla.containsKey(codificado)){
+                    bfwriter.write(tabla.get(codificado));
+                    bfwriter.write(" ");
+                    codificado="";
+                    codificado+=cadenaATraducir.charAt(nuevapos);
+                }
+                else{
+                    codificado+=cadenaATraducir.charAt(nuevapos);
+                }
+                nuevapos++;
+
+
+            }
+
+            bfwriter.close();
+            fileWriter.close();
+
+            System.out.println("\tArchivo 'reconstruccion."+nombreArchivo+"' creado satisfactoriamente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void generaArchivoHuffman() {
