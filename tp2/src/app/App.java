@@ -11,7 +11,7 @@ public class App {
 
         //LECTURA ARCHIVO
         BufferedReader archivo = null;
-        String inputFileName, datos = null;
+        String inputFileName;
 
         if (sistemaOperativo.startsWith("Windows"))
             inputFileName = "DatosTP2.txt";
