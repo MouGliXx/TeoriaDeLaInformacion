@@ -382,8 +382,8 @@ public class PrimeraParte {
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
             String cadenaATraducir="";
-            String cadenaActual="";
-            String aux="";
+            String cadenaActual;
+            String aux;
 
             while(datos.length()>pos){
                 aux = "";
@@ -409,11 +409,8 @@ public class PrimeraParte {
                     bfwriter.write(tabla.get(codificado));
                     bfwriter.write(" ");
                     codificado="";
-                    codificado+=cadenaATraducir.charAt(nuevapos);
                 }
-                else{
-                    codificado+=cadenaATraducir.charAt(nuevapos);
-                }
+                codificado+=cadenaATraducir.charAt(nuevapos);
                 nuevapos++;
             }
 

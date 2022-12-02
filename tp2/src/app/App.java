@@ -34,6 +34,8 @@ public class App {
             e.printStackTrace();
         }
 
+        //SEGUNDA PARTE
+        System.out.println("SEGUNDA PARTE PARTE:");
         double[][] matrizC1 = new double[5][3];
         double[] probPrioriC1 = new double[5];
         matrizC1[0][0]=0.3;matrizC1[0][1]=0.27;matrizC1[0][2]=0.43;
