@@ -8,15 +8,15 @@ public class ShannonFano {
     private HashMap<String, String> shannonFano = new HashMap<>();
     private double longitudMedia, rendimiento, redundancia;
 
-    public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia, int total) {
+    public ShannonFano(HashMap<String, Integer> frecuencias, double entropia, int total) {
         this.frecuencias = frecuencias;
-        generaShannonFano(codigo, "");
+        generaShannonFano(new ArrayList<>(frecuencias.keySet()), "");
         longitudMedia = longitudMedia(frecuencias, total, shannonFano);
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
 
-//        for (String key : frecuencias.keySet())
-//            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
+        for (String key : frecuencias.keySet())
+            System.out.println(key + " - " + frecuencias.get(key) + " - " + shannonFano.get(key));
     }
 
     public HashMap<String, String> getShannonFano() {
@@ -47,22 +47,33 @@ public class ShannonFano {
 
     public int calculaK(ArrayList<String> codigo) {
         ArrayList<String> mitadSuperior, mitadInferior;
-        int diferenciaMinima = 99999, k = 99999, diferencia;
+        int diferenciaMinima = 99999, k = 0, diferencia;
+        int acumulador = 0, total = sumaTotalFrencuencias(codigo);
 
-        if (!codigo.isEmpty()) {
-            for (int i = 1; i < codigo.size(); i++) {
-                mitadSuperior = cortaMitadSuperior(codigo, i);
-                mitadInferior = cortaMitadInferior(codigo, i);
-
-                diferencia = Math.abs(sumaTotalFrencuencias(mitadSuperior) - sumaTotalFrencuencias(mitadInferior));
-
-                if (diferencia <= diferenciaMinima) {
-                    diferenciaMinima = diferencia;
-                    k = i;
+        if (codigo.size() > 1) {
+            System.out.println("entro 000");
+            for (String palabra : codigo) {
+                acumulador += frecuencias.get(palabra);
+                k++;
+                if (acumulador >= total / 2) {
+                    System.out.println("entro 1");
+                    break;
                 }
             }
         }
 
+//            for (int i = 1; i < codigo.size(); i++) {
+//                mitadSuperior = cortaMitadSuperior(codigo, i);
+//                mitadInferior = cortaMitadInferior(codigo, i);
+//
+//                diferencia = Math.abs(sumaTotalFrencuencias(mitadSuperior) - sumaTotalFrencuencias(mitadInferior));
+//
+//                if (diferencia <= diferenciaMinima) {
+//                    diferenciaMinima = diferencia;
+//                    k = i;
+//                }
+//            }
+        System.out.println(k);
         return k;
     }
 

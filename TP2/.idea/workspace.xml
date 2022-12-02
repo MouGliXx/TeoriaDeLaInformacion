@@ -8,6 +8,10 @@
   <component name="ChangeListManager">
     <list default="true" id="ab75a071-ba69-4c1f-b377-cd858fba2f06" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archivos Generados/Primera Parte/ShannonFano.Fan" beforeDir="false" afterPath="$PROJECT_DIR$/Archivos Generados/Primera Parte/ShannonFano.Fan" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archivos Generados/Primera Parte/ShannonFano.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Archivos Generados/Primera Parte/ShannonFano.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Archivos Generados/Primera Parte/reconstruido.Fan" beforeDir="false" afterPath="$PROJECT_DIR$/Archivos Generados/Primera Parte/reconstruido.Fan" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modelo/ShannonFano.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/modelo/ShannonFano.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,5 +89,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/modelo/ShannonFano.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
