@@ -7,23 +7,18 @@ import java.io.*;
 
 public class App {
     public static void main (String[] args){
-        String sistemaOperativo = System.getProperty("os.name");
 
         //LECTURA ARCHIVO
         BufferedReader archivo = null;
         String inputFileName;
 
-        if (sistemaOperativo.startsWith("Windows"))
-            inputFileName = "DatosTP2.txt";
-        else
-            inputFileName = "../DatosTP2.txt";
-
+        inputFileName = "DatosTP2.txt";
         File url = new File(inputFileName);
 
         try {
             archivo = new BufferedReader(new FileReader(url));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Archivo no encontrado");
         }
 
         //PRIMERA PARTE
@@ -35,7 +30,7 @@ public class App {
         }
 
         //SEGUNDA PARTE
-        System.out.println("SEGUNDA PARTE PARTE:");
+        System.out.println("SEGUNDA PARTE:");
         double[][] matrizC1 = new double[5][3];
         double[] probPrioriC1 = new double[5];
         matrizC1[0][0]=0.3;matrizC1[0][1]=0.27;matrizC1[0][2]=0.43;
@@ -51,10 +46,10 @@ public class App {
 
         double[][] matrizC2 = new double[4][4];
         double[] probPrioriC2 = new double[4];
-        matrizC2[0][0]=0.2;matrizC2[0][1]=0.24;matrizC2[0][2]=0.16;matrizC2[0][3]=0.4;
-        matrizC2[1][0]=0.24;matrizC2[1][1]=0.3;matrizC2[1][2]=0.16;matrizC2[1][3]=0.3;
-        matrizC2[2][0]=0.24;matrizC2[2][1]=0.16;matrizC2[2][2]=0.2;matrizC2[2][3]=0.4;
-        matrizC2[3][0]=0.24;matrizC2[3][1]=0.3;matrizC2[3][2]=0.24;matrizC2[3][3]=0.22;
+        matrizC2[0][0]=0.2;matrizC2[0][1]=0.27;matrizC2[0][2]=0.18;matrizC2[0][3]=0.35;
+        matrizC2[1][0]=0.27;matrizC2[1][1]=0.3;matrizC2[1][2]=0.18;matrizC2[1][3]=0.25;
+        matrizC2[2][0]=0.27;matrizC2[2][1]=0.18;matrizC2[2][2]=0.2;matrizC2[2][3]=0.35;
+        matrizC2[3][0]=0.27;matrizC2[3][1]=0.3;matrizC2[3][2]=0.27;matrizC2[3][3]=0.16;
         probPrioriC2[0]=0.25;probPrioriC2[1]=0.33;probPrioriC2[2]=0.27;probPrioriC2[3]=0.15;
 
         SegundaParte segundaParteC2 = new SegundaParte(4,4,matrizC2,probPrioriC2);
@@ -63,12 +58,12 @@ public class App {
 
         double[][] matrizC3 = new double[6][4];
         double[] probPrioriC3 = new double[6];
-        matrizC3[0][0]=0.2;matrizC3[0][1]=0.24;matrizC3[0][2]=0.16;matrizC3[0][3]=0.4;
-        matrizC3[1][0]=0.24;matrizC3[1][1]=0.24;matrizC3[1][2]=0.3;matrizC3[1][3]=0.22;
-        matrizC3[2][0]=0.16;matrizC3[2][1]=0.2;matrizC3[2][2]=0.24;matrizC3[2][3]=0.4;
-        matrizC3[3][0]=0.24;matrizC3[3][1]=0.3;matrizC3[3][2]=0.16;matrizC3[3][3]=0.3;
-        matrizC3[4][0]=0.2;matrizC3[4][1]=0.24;matrizC3[4][2]=0.24;matrizC3[4][3]=0.32;
-        matrizC3[5][0]=0.16;matrizC3[5][1]=0.24;matrizC3[5][2]=0.3;matrizC3[5][3]=0.3;
+        matrizC3[0][0]=0.2;matrizC3[0][1]=0.27;matrizC3[0][2]=0.18;matrizC3[0][3]=0.35;
+        matrizC3[1][0]=0.27;matrizC3[1][1]=0.27;matrizC3[1][2]=0.3;matrizC3[1][3]=0.16;
+        matrizC3[2][0]=0.18;matrizC3[2][1]=0.2;matrizC3[2][2]=0.27;matrizC3[2][3]=0.35;
+        matrizC3[3][0]=0.27;matrizC3[3][1]=0.3;matrizC3[3][2]=0.18;matrizC3[3][3]=0.25;
+        matrizC3[4][0]=0.2;matrizC3[4][1]=0.27;matrizC3[4][2]=0.27;matrizC3[4][3]=0.26;
+        matrizC3[5][0]=0.18;matrizC3[5][1]=0.27;matrizC3[5][2]=0.3;matrizC3[5][3]=0.25;
         probPrioriC3[0]=0.15;probPrioriC3[1]=0.1;probPrioriC3[2]=0.2;probPrioriC3[3]=0.25;probPrioriC3[4]=0.14;probPrioriC3[5]=0.16;
 
         SegundaParte segundaParteC3 = new SegundaParte(6,4,matrizC3,probPrioriC3);

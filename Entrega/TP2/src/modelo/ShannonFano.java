@@ -8,9 +8,9 @@ public class ShannonFano {
     private HashMap<String, String> shannonFano = new HashMap<>();
     private double longitudMedia, rendimiento, redundancia;
 
-    public ShannonFano(HashMap<String, Integer> frecuencias, double entropia, int total) {
+    public ShannonFano(ArrayList<String> codigo, HashMap<String, Integer> frecuencias, double entropia, int total) {
         this.frecuencias = frecuencias;
-        generaShannonFano(new ArrayList<>(frecuencias.keySet()), "");
+        generaShannonFano(codigo, "");
         longitudMedia = longitudMedia(frecuencias, total, shannonFano);
         rendimiento = calculaRendimiento(entropia, longitudMedia);
         redundancia = calculaRedundancia(rendimiento);
@@ -46,14 +46,19 @@ public class ShannonFano {
     }
 
     public int calculaK(ArrayList<String> codigo) {
-        int acumulador = 0, k = 0, total = sumaTotalFrencuencias(codigo);
+        ArrayList<String> mitadSuperior, mitadInferior;
+        int diferenciaMinima = 99999, k = 99999, diferencia;
 
-        if (codigo.size() > 1) {
-            for (String palabra : codigo) {
-                acumulador += frecuencias.get(palabra);
-                k++;
-                if (acumulador >= total / 2) {
-                    break;
+        if (!codigo.isEmpty()) {
+            for (int i = 1; i < codigo.size(); i++) {
+                mitadSuperior = cortaMitadSuperior(codigo, i);
+                mitadInferior = cortaMitadInferior(codigo, i);
+
+                diferencia = Math.abs(sumaTotalFrencuencias(mitadSuperior) - sumaTotalFrencuencias(mitadInferior));
+
+                if (diferencia <= diferenciaMinima) {
+                    diferenciaMinima = diferencia;
+                    k = i;
                 }
             }
         }

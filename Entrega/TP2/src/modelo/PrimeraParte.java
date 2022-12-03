@@ -7,7 +7,7 @@ import static modelo.Huffman.construyeArbolHuffman;
 
 public class PrimeraParte {
     private String sistemaOperativo;
-    private ArrayList<String> diccionario;
+    private ArrayList<String> diccionario, codigo;
     private HashMap<String, Integer> frecuencias;
     private HashMap<String, Double> informacion;
     private double entropia;
@@ -19,18 +19,19 @@ public class PrimeraParte {
         sistemaOperativo = System.getProperty("os.name");
         diccionario = generaDiccionario(archivo);
         frecuencias = calculaFrecuencias(diccionario);
+        codigo = identificaPalabrasCodigo(frecuencias);
         informacion = calculaInformacion(frecuencias, diccionario.size());
         entropia = calculaEntropia(informacion, frecuencias, diccionario.size());
 
-        ShannonFano shannonFano = new ShannonFano(frecuencias, entropia, diccionario.size());
+        ShannonFano shannonFano = new ShannonFano(codigo, frecuencias, entropia, diccionario.size());
         generaArchivoShannonFano(frecuencias.size(), shannonFano);
         generaCompresionShannonFano(diccionario, shannonFano.getShannonFano());
 
         arbolHuffman = construyeArbolHuffman(frecuencias);
-        rendimientoHuffman = calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
-        redundanciaHuffman = calculaRedundancia(rendimientoHuffman);
-        longitudMediaHuffman = calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario);
-        cantidadSimbolosHuffman = arbolHuffman.size();
+        rendimientoHuffman=calculaRendimiento(calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario),entropia);
+        redundanciaHuffman=calculaRedundancia(rendimientoHuffman);
+        longitudMediaHuffman=calculaLongitudMediaHuffman(arbolHuffman,frecuencias,diccionario);
+        cantidadSimbolosHuffman=arbolHuffman.size();
 
         generaCompresionHuffman(diccionario,arbolHuffman);
         generaArchivoHuffman();
@@ -53,6 +54,10 @@ public class PrimeraParte {
         }
 
         return datos;
+    }
+
+    public ArrayList<String> identificaPalabrasCodigo(HashMap<String, Integer> frecuencias) {
+        return new ArrayList<>(frecuencias.keySet());
     }
 
     public HashMap<String, Integer> calculaFrecuencias(ArrayList<String> datos) {
@@ -146,14 +151,22 @@ public class PrimeraParte {
         return max;
     }
 
+    public String codificaHuffman(Map<String,String> arbolHuffman, ArrayList<String> diccionario) {
+        Iterator<String> it = diccionario.iterator();
+        String codificacion="";
+
+        for (String palabra : diccionario) {
+            codificacion+=arbolHuffman.get(palabra);
+        }
+
+        return codificacion;
+    }
+
     public void generaArchivoShannonFano(int cantSimbolos, ShannonFano shannonFano) {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/ShannonFano.txt";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/ShannonFano.txt";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
@@ -177,27 +190,28 @@ public class PrimeraParte {
         }
     }
 
-    public void generaCompresionShannonFano(ArrayList<String> diccionario, HashMap<String,String> shannonFano) {
+    public void generaCompresionShannonFano(ArrayList<String> diccionario, Map<String,String> shannonFano) {
         String outputFileName;
         FileWriter fileWriter;
-        byte ochoBits;
-        int byteFaltantes, j, i;
-        int maxpalabra = longitudMaximaPalabra(shannonFano), maxCodificacion = longitudMaximaCodificacion(shannonFano);
+        byte ochoBits=0b0, aux;
+        int bitsRestantes=8,j,i;
+        int byteFaltantes;
+        int maxpalabra=longitudMaximaPalabra((HashMap<String, String>) shannonFano),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) shannonFano);
 
-        if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/ShannonFano.Fan";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/ShannonFano.Fan";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
+
             bfwriter.write(shannonFano.size());
             bfwriter.write(maxpalabra);
             bfwriter.write(maxCodificacion);
 
-            for (HashMap.Entry<String, String> entry : shannonFano.entrySet()) {
+            int numBytes=0;
+
+            for (Map.Entry<String, String> entry : shannonFano.entrySet()) {
                 if (entry.getKey().length() < maxpalabra) {
                     byteFaltantes = maxpalabra - entry.getKey().length();
                     for (j = 0; j < byteFaltantes; j++) {
@@ -222,20 +236,24 @@ public class PrimeraParte {
             }
 
             int largo;
-            int bitsRestantes = 8;
+            bitsRestantes=8;
             ochoBits = 0b0;
 
             for (String palabra : diccionario) {
                 largo=shannonFano.get(palabra).length();
                 i = 0;
                 while (i < largo) {
-                    if(bitsRestantes == 0){
+                    if(bitsRestantes==0){
                         bfwriter.write(ochoBits);
                         ochoBits = 0b0;
-                        bitsRestantes = 8;
+                        bitsRestantes=8;
                     }
                     if (shannonFano.get(palabra).charAt(i) == '1') {
                         ochoBits |= (0b00000001 << (bitsRestantes-1));
+
+                        /*aux = 0b1;
+                        ochoBits = (byte) (ochoBits << 1);
+                        ochoBits |= (aux);*/
                     }
                     bitsRestantes--;
 
@@ -254,15 +272,12 @@ public class PrimeraParte {
     public void generaCompresionHuffman(ArrayList<String> diccionario, Map<String,String> huffman) {
         String outputFileName;
         FileWriter fileWriter;
-        byte ochoBits;
-        int i, j;
+        byte ochoBits, aux;
+        int i,j, limite;
         int byteFaltantes;
-        int maxpalabra = longitudMaximaPalabra((HashMap<String, String>) arbolHuffman),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) arbolHuffman);
+        int maxpalabra=longitudMaximaPalabra((HashMap<String, String>) arbolHuffman),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) arbolHuffman);
 
-        if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/Huffman.Huf";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
@@ -271,6 +286,9 @@ public class PrimeraParte {
             bfwriter.write(arbolHuffman.size());
             bfwriter.write(maxpalabra);
             bfwriter.write(maxCodificacion);
+
+            int numBytes=0;
+
 
             for (Map.Entry<String, String> entry : arbolHuffman.entrySet()) {
                 if (entry.getKey().length() < maxpalabra) {
@@ -311,6 +329,10 @@ public class PrimeraParte {
                     }
                     if (huffman.get(palabra).charAt(i) == '1') {
                         ochoBits |= (0b00000001 << (bitsRestantes-1));
+
+                        /*aux = 0b1;
+                        ochoBits = (byte) (ochoBits << 1);
+                        ochoBits |= (aux);*/
                     }
                     bitsRestantes--;
 
@@ -326,20 +348,18 @@ public class PrimeraParte {
         }
     }
 
+
     public void decodificaArchivo(String url,String nombreArchivo){
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/reconstruido."+nombreArchivo;
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/reconstruido."+nombreArchivo;
-
 
         int pos=0,j;
 
         try {
             BufferedReader archivo = new BufferedReader(new FileReader(url));
+            //RandomAccessFile archivo=new RandomAccessFile(url, "rw");
             Map<String,String> tabla = new HashMap<>();
 
             int numSimbolos=archivo.read();
@@ -378,15 +398,17 @@ public class PrimeraParte {
 
             //decodifico los datos
 
+
             fileWriter = new FileWriter(outputFileName, false);
             BufferedWriter bfwriter = new BufferedWriter(fileWriter);
 
+
             String cadenaATraducir="";
-            String cadenaActual;
-            String aux;
+            String cadenaActual="";
+            String aux="";
 
             while(datos.length()>pos){
-                aux = "";
+                aux="";
                 cadenaActual=Integer.toBinaryString(datos.charAt(pos));
                 if(cadenaActual.length()>8){
                     cadenaActual=cadenaActual.substring(8);
@@ -404,32 +426,39 @@ public class PrimeraParte {
             int nuevapos=0;
             String codificado="";
 
+
             while (cadenaATraducir.length()>nuevapos){
                 if(tabla.containsKey(codificado)){
                     bfwriter.write(tabla.get(codificado));
                     bfwriter.write(" ");
                     codificado="";
+                    codificado+=cadenaATraducir.charAt(nuevapos);
                 }
-                codificado+=cadenaATraducir.charAt(nuevapos);
+                else{
+                    codificado+=cadenaATraducir.charAt(nuevapos);
+                }
                 nuevapos++;
+
+
             }
 
-            System.out.println("\tArchivo 'reconstruccion."+nombreArchivo+"' creado satisfactoriamente.");
             bfwriter.close();
             fileWriter.close();
+
+            System.out.println("\tArchivo 'reconstruccion."+nombreArchivo+"' creado satisfactoriamente.");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public void generaArchivoHuffman() {
         String outputFileName;
         FileWriter fileWriter;
 
-        if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Huffman.txt";
-        else
-            outputFileName = "../Archivos Generados/Primera Parte/Huffman.txt";
 
         try {
             fileWriter = new FileWriter(outputFileName, false);
