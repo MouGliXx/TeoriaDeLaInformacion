@@ -7,12 +7,17 @@ import java.io.*;
 
 public class App {
     public static void main (String[] args){
+        String sistemaOperativo = System.getProperty("os.name");
 
         //LECTURA ARCHIVO
         BufferedReader archivo = null;
-        String inputFileName, datos = null;
+        String inputFileName;
 
-        inputFileName = "DatosTP2.txt";
+        if (sistemaOperativo.startsWith("Windows"))
+            inputFileName = "DatosTP2.txt";
+        else
+            inputFileName = "../DatosTP2.txt";
+
         File url = new File(inputFileName);
 
         try {
@@ -23,8 +28,14 @@ public class App {
 
         //PRIMERA PARTE
         System.out.println("PRIMERA PARTE:");
-        PrimeraParte primeraParte = new PrimeraParte(archivo);
+        try {
+            PrimeraParte primeraParte = new PrimeraParte(archivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        //SEGUNDA PARTE
+        System.out.println("SEGUNDA PARTE PARTE:");
         double[][] matrizC1 = new double[5][3];
         double[] probPrioriC1 = new double[5];
         matrizC1[0][0]=0.3;matrizC1[0][1]=0.27;matrizC1[0][2]=0.43;

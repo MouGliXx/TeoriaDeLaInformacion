@@ -73,10 +73,6 @@ public class SegundaParte {
         return ruido;
     }
 
-    public double[] getEntropiaPosteriori(){
-        return entropiaPosteriori;
-    }
-
     public double getInformacionMutuaSimetrica (){
         return informacionMutuaSimetrica;
     }
@@ -171,7 +167,6 @@ public class SegundaParte {
     }
 
     private double calcEntropiaAfin(){
-        double entroiaAfin = 0;
         for (int f = 0; f < i; f++)
             for (int c = 0 ; c < j ; c++)
                 if (probPosteriori[f][c]!=0.)
