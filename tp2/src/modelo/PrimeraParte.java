@@ -11,7 +11,7 @@ public class PrimeraParte {
     private HashMap<String, Integer> frecuencias;
     private HashMap<String, Double> informacion;
     private double entropia;
-    private Map<String,String> arbolHuffman;
+    private HashMap<String,String> arbolHuffman;
     private double rendimientoHuffman,redundanciaHuffman,longitudMediaHuffman;
     private int cantidadSimbolosHuffman;
 
@@ -251,13 +251,13 @@ public class PrimeraParte {
         }
     }
 
-    public void generaCompresionHuffman(ArrayList<String> diccionario, Map<String,String> huffman) {
+    public void generaCompresionHuffman(ArrayList<String> diccionario, HashMap<String,String> huffman) {
         String outputFileName;
         FileWriter fileWriter;
         byte ochoBits;
         int i, j;
         int byteFaltantes;
-        int maxpalabra = longitudMaximaPalabra((HashMap<String, String>) arbolHuffman),maxCodificacion=longitudMaximaCodificacion((HashMap<String, String>) arbolHuffman);
+        int maxpalabra = longitudMaximaPalabra(arbolHuffman), maxCodificacion=longitudMaximaCodificacion(arbolHuffman);
 
         if (sistemaOperativo.startsWith("Windows"))
             outputFileName = "Archivos Generados/Primera Parte/Huffman.Huf";

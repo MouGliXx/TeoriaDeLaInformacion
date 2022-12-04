@@ -31,40 +31,34 @@ public class Huffman {
         return root.izq==null && root.der==null;
     }
 
-    public static void encode(Nodo root, String str, Map<String, String> huffmanCode) {
-        if (root == null) {
-            return;
-        }
+    public static void encode(Nodo root, String str, HashMap<String, String> huffmanCode) {
+        if (root != null) {
+            if (esHoja(root)) {
+                huffmanCode.put(root.cadena, str.length() > 0 ? str : "1");
+            }
 
-        // Es un nodo hoja
-        if (esHoja(root)) {
-            huffmanCode.put(root.cadena, str.length() > 0 ? str : "1");
+            encode(root.izq, str + '0', huffmanCode);
+            encode(root.der, str + '1', huffmanCode);
         }
-
-        encode(root.izq, str + '0', huffmanCode);
-        encode(root.der, str + '1', huffmanCode);
     }
 
-    public static Map<String,String> construyeArbolHuffman(Map<String,Integer> datos) {
+    public static HashMap<String,String> construyeArbolHuffman(HashMap<String,Integer> datos) {
         PriorityQueue<Nodo> colaDatos = new PriorityQueue<>(new comparadorNodo());
 
-        Iterator<String> it=datos.keySet().iterator();
-
-        while(it.hasNext()){
-            String key=it.next();
+        for (String key : datos.keySet()) {
             colaDatos.add(new Nodo(key, datos.get(key)));
         }
 
-        while(colaDatos.size()>1){
+        while(colaDatos.size() > 1){
             Nodo izq=colaDatos.poll();
             Nodo der=colaDatos.poll();
 
-            int suma=izq.frecuencia+der.frecuencia;
+            int suma = izq.frecuencia + der.frecuencia;
             colaDatos.add(new Nodo(null,suma,izq,der));
         }
 
-        Map<String,String> huffman=new HashMap<>();
-        Nodo raiz=colaDatos.peek();
+        HashMap<String,String> huffman = new HashMap<>();
+        Nodo raiz = colaDatos.peek();
         encode(raiz,"",huffman);
 
         return huffman;
